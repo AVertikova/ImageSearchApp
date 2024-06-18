@@ -13,7 +13,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let navigationController = UINavigationController()
+        let networkService = NetworkService()
+        let downloadService = DownloadService()
+        
+        let dependencies = ImageSearchAssembly.Dependencies(navigationController: navigationController,
+                                                            networkService: networkService,
+                                                            downloadService: downloadService)
+        
+        
+        let viewController = ImageSearchAssembly.createModule(with: dependencies)
+        navigationController.viewControllers = [viewController]
+        
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
 }
 
