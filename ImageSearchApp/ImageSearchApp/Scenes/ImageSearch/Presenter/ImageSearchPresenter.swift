@@ -5,11 +5,11 @@
 //  Created by Анна Вертикова on 18.06.2024.
 //
 
-import UIKit
-
+import UIKit // убрать uikit добавить доп делегат UICollectionViewDelegate перенести в китовое
 protocol IImageSearchPresenter {
     func didLoad(ui: IImageView)
-    func performSearch(with searchQuery: String)
+    func performNewSearch(with searchQuery: String)
+    func updateSearchResult()
     func configureCell(_ cell: SearchResultCell, at index: Int)
     
     func startDownloadImage(at index: Int)
@@ -29,13 +29,14 @@ protocol IImageSearchViewUpdateDelegate: AnyObject {
     func updateDownloadedItem(with image: ImageObject)
 }
 
-protocol IImageSearchTableViewDelegate: UITableViewDelegate {}
+protocol IImageSearchCollectionViewDelegate: UICollectionViewDelegate {}
 
 final class ImageSearchPresenter: NSObject {
     
     weak var ui: IImageView?
     private var interactor: ImageSearchInteractor
     private var router: ImageSearchRouter
+    private var searchQuerry: String = ""
     
     private var searchResult: [ImageObject] = [] {
         didSet {
@@ -56,21 +57,15 @@ extension ImageSearchPresenter: IImageSearchPresenter {
         self.ui = ui
     }
     
-    func performSearch(with searchQuery: String) {
-        ui?.showActivityIndicator()
+    func performNewSearch(with searchQuery: String) {
         self.searchResult = []
-        interactor.requestData(with: searchQuery) { [weak self] result, error in
-            
-            guard let searchResult = result, error == nil else {
-                if let error = error as? NetworkError {
-                    Notifier.errorOccured(message: "Error: \(error.description)")
-                } else {
-                    Notifier.errorOccured(message: "Error: \(String(describing: error?.localizedDescription))")
-                }
-                return
-            }
-            self?.searchResult = searchResult
-        }
+        self.searchQuerry = searchQuery
+        interactor.newSearchStarted()
+        performSearch(with: searchQuery)
+    }
+    
+    func updateSearchResult() {
+        performSearch(with: self.searchQuerry)
     }
     
     func configureCell(_ cell: SearchResultCell, at index: Int) {
@@ -135,27 +130,46 @@ extension ImageSearchPresenter: IImageSearchViewUpdateDelegate {
     }
 }
 
-extension ImageSearchPresenter: IImageSearchTableViewDelegate {
+private extension ImageSearchPresenter {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        guard let sourceVC = self.ui as? ImageSearchViewController else {
-            fatalError(CommonError.failedToShowModalWindow)
-        }
-        
-        if searchResult[indexPath.row].downloaded {
+    func performSearch(with searchQuery: String) {
+        ui?.showActivityIndicator()
+        interactor.requestData(with: searchQuery) { [weak self] result, error in
             
-            interactor.getDownloadedImage(at: indexPath.row) { [weak self] image, error in
-                
-                guard let image = image, error == nil else {
-                    Notifier.errorOccured(message: CommonError.failedToLoadData)
-                    return
+            guard let searchResult = result, error == nil else {
+                if let error = error as? NetworkError {
+                    Notifier.errorOccured(message: "Error: \(error.description)")
+                } else {
+                    Notifier.errorOccured(message: "Error: \(String(describing: error?.localizedDescription))")
                 }
-                
-                self?.router.showDownloadedImageModally(with: image, at: sourceVC)
+                return
             }
-        } else {
-            Notifier.errorOccured(message: CommonError.imageNotDownloaded)
+            self?.searchResult = searchResult
         }
     }
+}
+
+extension ImageSearchPresenter: IImageSearchCollectionViewDelegate {
+    
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        
+//        guard let sourceVC = self.ui as? ImageSearchViewController else {
+//            fatalError(CommonError.failedToShowModalWindow)
+//        }
+//        
+//        if searchResult[indexPath.row].downloaded {
+//            
+//            interactor.getDownloadedImage(at: indexPath.row) { [weak self] image, error in
+//                
+//                guard let image = image, error == nil else {
+//                    Notifier.errorOccured(message: CommonError.failedToLoadData)
+//                    return
+//                }
+//                
+//                self?.router.showDownloadedImageModally(with: image, at: sourceVC)
+//            }
+//        } else {
+//            Notifier.errorOccured(message: CommonError.imageNotDownloaded)
+//        }
+//    }
 }

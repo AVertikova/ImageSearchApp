@@ -8,6 +8,7 @@
 import UIKit
 
 protocol IImageSearchInteractor {
+    func newSearchStarted()
     func requestData(with searchQuery: String, completion: @escaping ([ImageObject]?, Error?) -> Void)
     
     func startDownload(_ image: ImageObject)
@@ -21,6 +22,9 @@ protocol IImageSearchInteractor {
 final class ImageSearchInteractor: NSObject {
     private let downloadService: DownloadService
     private let networkService: INetworkService
+    
+    private var querryResultPageNumber: Int = 1
+    private let querryResultTotalPages: Int = 20
     
     weak var uiUpdater: IImageSearchViewUpdateDelegate?
     
@@ -44,11 +48,15 @@ final class ImageSearchInteractor: NSObject {
 
 extension ImageSearchInteractor: IImageSearchInteractor {
     
-    func requestData(with searchQuery: String, completion: @escaping ([ImageObject]?, Error?) -> Void ) {
+    func newSearchStarted() {
         self.images = []
-        
-        networkService.getSearchResults(searchQuery: searchQuery) { [weak self] response in
-            
+        self.querryResultPageNumber = 1
+    }
+    
+    func requestData(with searchQuery: String, completion: @escaping ([ImageObject]?, Error?) -> Void ) {
+        guard self.querryResultPageNumber <= querryResultTotalPages else { return }
+        networkService.getSearchResults(searchQuery: searchQuery, pageNumber: self.querryResultPageNumber) { [weak self] response in
+           
             switch response {
                 
             case .success(let data):
@@ -64,13 +72,13 @@ extension ImageSearchInteractor: IImageSearchInteractor {
                         completion (self?.images, nil)
                     }
                 } catch {
-                    
                     Notifier.errorOccured(message: "JSON Error: \(String(describing: error))")
                     return
                 }
             case .failure(let error):
                 completion (nil, error)
             }
+            self?.querryResultPageNumber += 1
         }
     }
     

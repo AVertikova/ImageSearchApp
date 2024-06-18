@@ -27,6 +27,7 @@
 		EBA5343A2C21485000C4093A /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534392C21485000C4093A /* NetworkError.swift */; };
 		EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5343B2C21487A00C4093A /* Notifier.swift */; };
 		EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */; };
+		EBA534452C21709900C4093A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534442C21709900C4093A /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		EBA534392C21485000C4093A /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		EBA5343B2C21487A00C4093A /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchAssembly.swift; sourceTree = "<group>"; };
+		EBA534442C21709900C4093A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,9 +86,10 @@
 		EBA533F62C2142AE00C4093A /* ImageSearchApp */ = {
 			isa = PBXGroup;
 			children = (
-				EBA534302C2147C700C4093A /* Network */,
-				EBA5341E2C21461E00C4093A /* Error */,
+				EBA534432C21708800C4093A /* Navigation */,
 				EBA5340E2C21439C00C4093A /* App */,
+				EBA534302C2147C700C4093A /* Network */,
+				EBA5341E2C21461E00C4093A /* Errors */,
 				EBA534112C2143C900C4093A /* CoreData */,
 				EBA5340F2C2143AF00C4093A /* Scenes */,
 				EBA534082C2142AF00C4093A /* Info.plist */,
@@ -126,12 +129,12 @@
 		EBA5341B2C21451000C4093A /* ImageSearch */ = {
 			isa = PBXGroup;
 			children = (
+				EBA534462C217EFF00C4093A /* Assembly */,
 				EBA534212C21465A00C4093A /* View */,
 				EBA5343D2C214ADF00C4093A /* Interactor */,
 				EBA5343E2C214AEE00C4093A /* Presenter */,
 				EBA534402C214B0200C4093A /* Entities */,
 				EBA5343F2C214AFB00C4093A /* Router */,
-				EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */,
 			);
 			path = ImageSearch;
 			sourceTree = "<group>";
@@ -150,13 +153,14 @@
 			path = ImageViewer;
 			sourceTree = "<group>";
 		};
-		EBA5341E2C21461E00C4093A /* Error */ = {
+		EBA5341E2C21461E00C4093A /* Errors */ = {
 			isa = PBXGroup;
 			children = (
+				EBA534392C21485000C4093A /* NetworkError.swift */,
 				EBA5341F2C21463100C4093A /* CommonError.swift */,
 				EBA5343B2C21487A00C4093A /* Notifier.swift */,
 			);
-			path = Error;
+			path = Errors;
 			sourceTree = "<group>";
 		};
 		EBA534212C21465A00C4093A /* View */ = {
@@ -176,7 +180,6 @@
 				EBA534332C2147F500C4093A /* DownloadService.swift */,
 				EBA534352C21481700C4093A /* NetworkService.swift */,
 				EBA534372C21483B00C4093A /* APIResponse.swift */,
-				EBA534392C21485000C4093A /* NetworkError.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -211,6 +214,22 @@
 				EBA5342C2C21476000C4093A /* ImageObject.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		EBA534432C21708800C4093A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				EBA534442C21709900C4093A /* TabBarController.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		EBA534462C217EFF00C4093A /* Assembly */ = {
+			isa = PBXGroup;
+			children = (
+				EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */,
+			);
+			path = Assembly;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,6 +312,7 @@
 				EBA534362C21481700C4093A /* NetworkService.swift in Sources */,
 				EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */,
 				EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */,
+				EBA534452C21709900C4093A /* TabBarController.swift in Sources */,
 				EBA534252C2146A500C4093A /* ImageSearchView.swift in Sources */,
 				EBA534382C21483B00C4093A /* APIResponse.swift in Sources */,
 				EBA533F82C2142AE00C4093A /* AppDelegate.swift in Sources */,

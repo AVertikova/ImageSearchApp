@@ -8,7 +8,7 @@
 import UIKit
 
 protocol INetworkService {
-    func getSearchResults(searchQuery: String, completion: @escaping (Result<Data, NetworkError>) -> Void)
+    func getSearchResults(searchQuery: String, pageNumber: Int, completion: @escaping (Result<Data, NetworkError>) -> Void)
     func getPreviewImage(with query: String, completion: @escaping (UIImage?, Error?) -> Void )
 }
 
@@ -19,8 +19,8 @@ final class NetworkService {
 
 extension NetworkService: INetworkService {
     
-    func getSearchResults(searchQuery: String, completion: @escaping (Result<Data, NetworkError>) -> Void) {
-        guard let request = makeRequestURL(searchQuery: searchQuery) else { return }
+    func getSearchResults(searchQuery: String, pageNumber: Int, completion: @escaping (Result<Data, NetworkError>) -> Void) {
+        guard let request = makeRequestURL(with: searchQuery, pageNumber: pageNumber) else { return }
         
         urlSession.dataTask(with: request) { data, response, error in
             
@@ -66,18 +66,21 @@ extension NetworkService: INetworkService {
 
 private extension NetworkService {
     
-    func makeRequestURL(searchQuery: String) -> URLRequest? {
+    func makeRequestURL(with searchQuery: String, pageNumber: Int) -> URLRequest? {
         var baseComponent = URLComponents(string: "https://api.unsplash.com/search/photos")
         
         let searchQueryItem = URLQueryItem(name: "query", value: searchQuery)
         let clientIdItem = URLQueryItem(name: "client_id", value: id)
+        let pageNumber = URLQueryItem(name: "page", value: String(pageNumber))
+        let imagesPerSearch = URLQueryItem(name: "per_page", value: "50")
         
-        baseComponent?.queryItems = [searchQueryItem, clientIdItem]
+        baseComponent?.queryItems = [pageNumber, imagesPerSearch, searchQueryItem, clientIdItem]
         
         guard let baseUrlComponent = baseComponent?.url else {
+            
             return nil
         }
-        
+        print(baseUrlComponent)
         return URLRequest(url: baseUrlComponent)
     }
     

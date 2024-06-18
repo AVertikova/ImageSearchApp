@@ -20,14 +20,14 @@ class ImageSearchViewController: UIViewController {
     
     private let presenter: IImageSearchPresenter
     private let dataSource: IImageSearchDataSource
-    private let tableViewDelegate: IImageSearchTableViewDelegate
+    private let collectionViewDelegate: IImageSearchCollectionViewDelegate
     
     private var searchBar: UISearchBar = UISearchBar()
     
     private lazy var contentView: ImageSearchView = {
         let view = ImageSearchView()
-        view.setDataSource(self)
-        view.setTableViewDelegate(tableViewDelegate)
+        view.setCollectionViewDataSource(self)
+        view.setCollectionViewDelegate(self)
         view.setSearchBarDelegate(self)
         
         return view
@@ -35,11 +35,11 @@ class ImageSearchViewController: UIViewController {
     
     init(presenter: IImageSearchPresenter,
          dataSource: IImageSearchDataSource,
-         tableViewDelegate: IImageSearchTableViewDelegate) {
+         tableViewDelegate: IImageSearchCollectionViewDelegate) {
         
         self.presenter = presenter
         self.dataSource = dataSource
-        self.tableViewDelegate = tableViewDelegate
+        self.collectionViewDelegate = tableViewDelegate
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -73,7 +73,7 @@ extension ImageSearchViewController: IImageView {
     
     func updateUI() {
         DispatchQueue.main.async {
-            self.contentView.tableView.reloadData()
+            self.contentView.collectionView.reloadData()
         }
     }
     
@@ -86,21 +86,27 @@ extension ImageSearchViewController: IImageView {
     }
 }
 
-extension ImageSearchViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension ImageSearchViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         dataSource.getNumberOfRows()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as? SearchResultCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.identifier, for: indexPath) as? SearchResultCell {
             
             presenter.configureCell(cell, at: indexPath.row)
             cell.delegate = self
+            cell.isUserInteractionEnabled = true
             
             return cell
         } else {
-            return UITableViewCell()
+            return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == dataSource.getNumberOfRows() - 1 {
+            presenter.updateSearchResult()
         }
     }
 }
@@ -109,7 +115,7 @@ extension ImageSearchViewController: ICellButtonsHandler {
     
     func downloadTapped(_ cell: SearchResultCell) {
         
-        if let indexPath = contentView.tableView.indexPath(for: cell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
             
             presenter.startDownloadImage(at: indexPath.row)
             contentView.updateRows(at: indexPath.row)
@@ -117,21 +123,21 @@ extension ImageSearchViewController: ICellButtonsHandler {
     }
     
     func pauseTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.tableView.indexPath(for: cell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
             presenter.pauseDownloadImage(at: indexPath.row)
             contentView.updateRows(at: indexPath.row)
         }
     }
     
     func resumeTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.tableView.indexPath(for: cell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
             presenter.resumeDownloadImage(at: indexPath.row)
             contentView.updateRows(at: indexPath.row)
         }
     }
     
     func cancelTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.tableView.indexPath(for: cell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
             presenter.cancelDownloadImage(at: indexPath.row)
             contentView.updateRows(at: indexPath.row)
         }
@@ -147,7 +153,7 @@ extension ImageSearchViewController: UISearchBarDelegate {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             return
         }
-        presenter.performSearch(with: searchText)
+        presenter.performNewSearch(with: searchText)
     }
 }
 
@@ -173,4 +179,22 @@ extension ImageSearchViewController: INotifierDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+}
+
+extension ImageSearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        true
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+//        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (action) -> UIMenu? in
+//            
+//            let download = UIAction(title: "Download", image: UIImage(systemName: "square.and.arrow.down"), identifier: nil, discoverabilityTitle: nil, state: .off) { (_) in
+//                print("edit button clicked")
+//            }
+//            
+//            return UIMenu(title: "Options", image: nil, identifier: nil, options: UIMenu.Options.displayInline, children: [download])
+//        }
+//        return configuration
+//    }
 }
