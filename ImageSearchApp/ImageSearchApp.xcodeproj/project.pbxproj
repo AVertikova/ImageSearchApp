@@ -12,6 +12,21 @@
 		EBA534022C2142AE00C4093A /* ImageSearchApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBA534002C2142AE00C4093A /* ImageSearchApp.xcdatamodeld */; };
 		EBA534042C2142AF00C4093A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA534032C2142AF00C4093A /* Assets.xcassets */; };
 		EBA534072C2142AF00C4093A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = EBA534062C2142AF00C4093A /* Base */; };
+		EBA534202C21463100C4093A /* CommonError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5341F2C21463100C4093A /* CommonError.swift */; };
+		EBA534232C21467000C4093A /* ImageSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534222C21467000C4093A /* ImageSearchViewController.swift */; };
+		EBA534252C2146A500C4093A /* ImageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534242C2146A500C4093A /* ImageSearchView.swift */; };
+		EBA534272C2146C500C4093A /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534262C2146C500C4093A /* SearchResultCell.swift */; };
+		EBA534292C21471000C4093A /* ImageSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534282C21471000C4093A /* ImageSearchInteractor.swift */; };
+		EBA5342B2C21473E00C4093A /* ImageSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342A2C21473E00C4093A /* ImageSearchPresenter.swift */; };
+		EBA5342D2C21476000C4093A /* ImageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342C2C21476000C4093A /* ImageObject.swift */; };
+		EBA5342F2C21479000C4093A /* ImageSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342E2C21479000C4093A /* ImageSearchRouter.swift */; };
+		EBA534322C2147DE00C4093A /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534312C2147DE00C4093A /* DownloadItem.swift */; };
+		EBA534342C2147F500C4093A /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534332C2147F500C4093A /* DownloadService.swift */; };
+		EBA534362C21481700C4093A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534352C21481700C4093A /* NetworkService.swift */; };
+		EBA534382C21483B00C4093A /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534372C21483B00C4093A /* APIResponse.swift */; };
+		EBA5343A2C21485000C4093A /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534392C21485000C4093A /* NetworkError.swift */; };
+		EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5343B2C21487A00C4093A /* Notifier.swift */; };
+		EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +37,21 @@
 		EBA534032C2142AF00C4093A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EBA534062C2142AF00C4093A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EBA534082C2142AF00C4093A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBA5341F2C21463100C4093A /* CommonError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonError.swift; sourceTree = "<group>"; };
+		EBA534222C21467000C4093A /* ImageSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchViewController.swift; sourceTree = "<group>"; };
+		EBA534242C2146A500C4093A /* ImageSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchView.swift; sourceTree = "<group>"; };
+		EBA534262C2146C500C4093A /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		EBA534282C21471000C4093A /* ImageSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchInteractor.swift; sourceTree = "<group>"; };
+		EBA5342A2C21473E00C4093A /* ImageSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchPresenter.swift; sourceTree = "<group>"; };
+		EBA5342C2C21476000C4093A /* ImageObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageObject.swift; sourceTree = "<group>"; };
+		EBA5342E2C21479000C4093A /* ImageSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchRouter.swift; sourceTree = "<group>"; };
+		EBA534312C2147DE00C4093A /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
+		EBA534332C2147F500C4093A /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
+		EBA534352C21481700C4093A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		EBA534372C21483B00C4093A /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		EBA534392C21485000C4093A /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		EBA5343B2C21487A00C4093A /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
+		EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchAssembly.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +84,8 @@
 		EBA533F62C2142AE00C4093A /* ImageSearchApp */ = {
 			isa = PBXGroup;
 			children = (
+				EBA534302C2147C700C4093A /* Network */,
+				EBA5341E2C21461E00C4093A /* Error */,
 				EBA5340E2C21439C00C4093A /* App */,
 				EBA534112C2143C900C4093A /* CoreData */,
 				EBA5340F2C2143AF00C4093A /* Scenes */,
@@ -94,6 +126,12 @@
 		EBA5341B2C21451000C4093A /* ImageSearch */ = {
 			isa = PBXGroup;
 			children = (
+				EBA534212C21465A00C4093A /* View */,
+				EBA5343D2C214ADF00C4093A /* Interactor */,
+				EBA5343E2C214AEE00C4093A /* Presenter */,
+				EBA534402C214B0200C4093A /* Entities */,
+				EBA5343F2C214AFB00C4093A /* Router */,
+				EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */,
 			);
 			path = ImageSearch;
 			sourceTree = "<group>";
@@ -110,6 +148,69 @@
 			children = (
 			);
 			path = ImageViewer;
+			sourceTree = "<group>";
+		};
+		EBA5341E2C21461E00C4093A /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				EBA5341F2C21463100C4093A /* CommonError.swift */,
+				EBA5343B2C21487A00C4093A /* Notifier.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		EBA534212C21465A00C4093A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EBA534222C21467000C4093A /* ImageSearchViewController.swift */,
+				EBA534242C2146A500C4093A /* ImageSearchView.swift */,
+				EBA534262C2146C500C4093A /* SearchResultCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EBA534302C2147C700C4093A /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				EBA534312C2147DE00C4093A /* DownloadItem.swift */,
+				EBA534332C2147F500C4093A /* DownloadService.swift */,
+				EBA534352C21481700C4093A /* NetworkService.swift */,
+				EBA534372C21483B00C4093A /* APIResponse.swift */,
+				EBA534392C21485000C4093A /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		EBA5343D2C214ADF00C4093A /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				EBA534282C21471000C4093A /* ImageSearchInteractor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
+		EBA5343E2C214AEE00C4093A /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				EBA5342A2C21473E00C4093A /* ImageSearchPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		EBA5343F2C214AFB00C4093A /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				EBA5342E2C21479000C4093A /* ImageSearchRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		EBA534402C214B0200C4093A /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				EBA5342C2C21476000C4093A /* ImageObject.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,9 +283,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBA534272C2146C500C4093A /* SearchResultCell.swift in Sources */,
+				EBA5343A2C21485000C4093A /* NetworkError.swift in Sources */,
 				EBA534022C2142AE00C4093A /* ImageSearchApp.xcdatamodeld in Sources */,
+				EBA5342B2C21473E00C4093A /* ImageSearchPresenter.swift in Sources */,
+				EBA534292C21471000C4093A /* ImageSearchInteractor.swift in Sources */,
+				EBA534232C21467000C4093A /* ImageSearchViewController.swift in Sources */,
+				EBA5342F2C21479000C4093A /* ImageSearchRouter.swift in Sources */,
+				EBA534362C21481700C4093A /* NetworkService.swift in Sources */,
+				EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */,
+				EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */,
+				EBA534252C2146A500C4093A /* ImageSearchView.swift in Sources */,
+				EBA534382C21483B00C4093A /* APIResponse.swift in Sources */,
 				EBA533F82C2142AE00C4093A /* AppDelegate.swift in Sources */,
+				EBA534322C2147DE00C4093A /* DownloadItem.swift in Sources */,
+				EBA534342C2147F500C4093A /* DownloadService.swift in Sources */,
 				EBA533FA2C2142AE00C4093A /* SceneDelegate.swift in Sources */,
+				EBA5342D2C21476000C4093A /* ImageObject.swift in Sources */,
+				EBA534202C21463100C4093A /* CommonError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
