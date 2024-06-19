@@ -5,20 +5,22 @@
 //  Created by Анна Вертикова on 18.06.2024.
 //
 
-import UIKit // убрать uikit добавить доп делегат UICollectionViewDelegate перенести в китовое
+import Foundation
+
 protocol IImageSearchPresenter {
     func didLoad(ui: IImageView)
     func performNewSearch(with searchQuery: String)
     func updateSearchResult()
     func configureCell(_ cell: SearchResultCell, at index: Int)
     
+    func showImagePreview(at index: Int)
     func startDownloadImage(at index: Int)
     func pauseDownloadImage(at index: Int)
     func resumeDownloadImage(at index: Int)
     func cancelDownloadImage(at index: Int)
 }
 
-protocol IImageSearchDataSource {
+protocol IImageSearchResultDataSource {
     func getNumberOfRows() -> Int
     func getCellForRow(at index: Int) -> ImageObject
 }
@@ -29,7 +31,10 @@ protocol IImageSearchViewUpdateDelegate: AnyObject {
     func updateDownloadedItem(with image: ImageObject)
 }
 
-protocol IImageSearchCollectionViewDelegate: UICollectionViewDelegate {}
+protocol IImageSearchResultDelegate {
+    func imageSelected(at index: Int)
+    func imageDeselected(at index: Int)
+}
 
 final class ImageSearchPresenter: NSObject {
     
@@ -79,6 +84,16 @@ extension ImageSearchPresenter: IImageSearchPresenter {
         cell.configure(with: image, downloaded: downloaded, downloadItem: downloadItem)
     }
     
+    func showImagePreview(at index: Int) {
+        
+        guard let sourceVC = self.ui as? ImageSearchViewController else {
+            fatalError(CommonError.failedToShowModalWindow)
+        }
+        
+        guard let image = searchResult[index].image else { return }
+        router.showImageModally(with: image, at: sourceVC)
+    }
+    
     func startDownloadImage(at index: Int) {
         let image = searchResult[index]
         interactor.startDownload(image)
@@ -101,7 +116,7 @@ extension ImageSearchPresenter: IImageSearchPresenter {
     }
 }
 
-extension ImageSearchPresenter: IImageSearchDataSource {
+extension ImageSearchPresenter: IImageSearchResultDataSource {
     
     func getNumberOfRows() -> Int {
         return searchResult.count
@@ -149,27 +164,29 @@ private extension ImageSearchPresenter {
     }
 }
 
-extension ImageSearchPresenter: IImageSearchCollectionViewDelegate {
+extension ImageSearchPresenter: IImageSearchResultDelegate {
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-//        guard let sourceVC = self.ui as? ImageSearchViewController else {
-//            fatalError(CommonError.failedToShowModalWindow)
-//        }
-//        
-//        if searchResult[indexPath.row].downloaded {
-//            
-//            interactor.getDownloadedImage(at: indexPath.row) { [weak self] image, error in
-//                
-//                guard let image = image, error == nil else {
-//                    Notifier.errorOccured(message: CommonError.failedToLoadData)
-//                    return
-//                }
-//                
-//                self?.router.showDownloadedImageModally(with: image, at: sourceVC)
-//            }
-//        } else {
-//            Notifier.errorOccured(message: CommonError.imageNotDownloaded)
-//        }
-//    }
+    func imageSelected(at index: Int) {
+        if searchResult[index].downloaded == false {
+            ui?.showDownloadMenu(at: index)
+            
+        } else {
+            guard let sourceVC = self.ui as? ImageSearchViewController else {
+                fatalError(CommonError.failedToShowModalWindow)
+            }
+            interactor.getDownloadedImage(at: index) { [weak self] image, error in
+                
+                guard let image = image, error == nil else {
+                    Notifier.errorOccured(message: CommonError.failedToLoadData)
+                    return
+                }
+                self?.router.showImageModally(with: image, at: sourceVC)
+            }
+        }
+    }
+    
+    func imageDeselected(at index: Int) {
+        ui?.hideDownloadMenu(at: index)
+    }
 }
+

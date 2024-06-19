@@ -15,12 +15,12 @@ final class ImageSearchRouter {
         self.navigationController = navigationController
     }
     
-    func showDownloadedImageModally(with image: UIImage, at sourceVC: ImageSearchViewController) {
+    func showImageModally(with image: UIImage, at sourceVC: ImageSearchViewController) {
         
-//        let parameters = ImageViewerAssembly.Parameters(image: image)
-//        let destinationVC = ImageViewerAssembly.createModule(parameters: parameters)
-//        let imageViewerNavigationController = UINavigationController(rootViewController: destinationVC)
-//        sourceVC.present(imageViewerNavigationController, animated: true)
+        let parameters = ImagePreviewAssembly.Parameters(image: image)
+        let destinationVC = ImagePreviewAssembly.createModule(parameters: parameters)
+        let imageViewerNavigationController = UINavigationController(rootViewController: destinationVC)
+        sourceVC.present(imageViewerNavigationController, animated: true)
     }
 }
 

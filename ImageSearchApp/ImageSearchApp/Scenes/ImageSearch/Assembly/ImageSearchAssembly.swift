@@ -21,7 +21,7 @@ enum ImageSearchAssembly {
                                                networkService: dependecies.networkService)
         let router = ImageSearchRouter(navigationController: dependecies.navigationController)
         let presenter = ImageSearchPresenter(interactor: interactor, router: router)
-        let viewController = ImageSearchViewController(presenter: presenter, dataSource: presenter, tableViewDelegate: presenter)
+        let viewController = ImageSearchViewController(presenter: presenter, dataSource: presenter, delegate: presenter)
         
         return viewController
     }

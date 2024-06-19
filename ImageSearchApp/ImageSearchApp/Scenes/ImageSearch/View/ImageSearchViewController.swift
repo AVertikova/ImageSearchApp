@@ -14,13 +14,25 @@ protocol IImageView: AnyObject {
     
     func showActivityIndicator()
     func hideActivityIndicator()
+    
+    func showDownloadMenu(at index: Int)
+    func hideDownloadMenu(at index: Int)
 }
+
+protocol ICellButtonsHandler {
+    func downloadTapped(_ cell: SearchResultCell)
+    func previewTapped(_ cell: SearchResultCell)
+    func pauseTapped(_ cell: SearchResultCell)
+    func resumeTapped(_ cell: SearchResultCell)
+    func cancelTapped(_ cell: SearchResultCell)
+}
+
 
 class ImageSearchViewController: UIViewController {
     
     private let presenter: IImageSearchPresenter
-    private let dataSource: IImageSearchDataSource
-    private let collectionViewDelegate: IImageSearchCollectionViewDelegate
+    private let searchResultDataSource: IImageSearchResultDataSource
+    private let searchResultDelegate: IImageSearchResultDelegate
     
     private var searchBar: UISearchBar = UISearchBar()
     
@@ -34,12 +46,12 @@ class ImageSearchViewController: UIViewController {
     }()
     
     init(presenter: IImageSearchPresenter,
-         dataSource: IImageSearchDataSource,
-         tableViewDelegate: IImageSearchCollectionViewDelegate) {
+         dataSource: IImageSearchResultDataSource,
+         delegate: IImageSearchResultDelegate) {
         
         self.presenter = presenter
-        self.dataSource = dataSource
-        self.collectionViewDelegate = tableViewDelegate
+        self.searchResultDataSource = dataSource
+        self.searchResultDelegate = delegate
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -84,11 +96,23 @@ extension ImageSearchViewController: IImageView {
     func hideActivityIndicator() {
         contentView.hideActivityIndicator()
     }
+    
+    func showDownloadMenu(at index: Int) {
+        if let cell = contentView.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? SearchResultCell  {
+            cell.showDownloadMenu()
+        }
+    }
+    
+    func hideDownloadMenu(at index: Int) {
+        if let cell = contentView.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? SearchResultCell {
+            cell.hideDownloadMenu()
+        }
+    }
 }
 
 extension ImageSearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        dataSource.getNumberOfRows()
+        searchResultDataSource.getNumberOfRows()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -105,19 +129,39 @@ extension ImageSearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == dataSource.getNumberOfRows() - 1 {
+        if indexPath.row == searchResultDataSource.getNumberOfRows() - 1 {
             presenter.updateSearchResult()
         }
+    }
+}
+
+extension ImageSearchViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            searchResultDelegate.imageSelected(at: indexPath.item)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+            searchResultDelegate.imageDeselected(at: indexPath.item)
     }
 }
 
 extension ImageSearchViewController: ICellButtonsHandler {
     
     func downloadTapped(_ cell: SearchResultCell) {
-        
         if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            
             presenter.startDownloadImage(at: indexPath.row)
+            contentView.updateRows(at: indexPath.row)
+        }
+    }
+    
+    func previewTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.showImagePreview(at: indexPath.row)
             contentView.updateRows(at: indexPath.row)
         }
     }
@@ -142,8 +186,6 @@ extension ImageSearchViewController: ICellButtonsHandler {
             contentView.updateRows(at: indexPath.row)
         }
     }
-    
-    
 }
 
 extension ImageSearchViewController: UISearchBarDelegate {
@@ -154,17 +196,6 @@ extension ImageSearchViewController: UISearchBarDelegate {
             return
         }
         presenter.performNewSearch(with: searchText)
-    }
-}
-
-private extension ImageSearchViewController {
-    
-    func setupNavigationBar() {
-        contentView.setSearchBarDelegate(self)
-    }
-    
-    func setupNotifications() {
-        Notifier.notificationDelegate = self
     }
 }
 
@@ -181,20 +212,15 @@ extension ImageSearchViewController: INotifierDelegate {
     }
 }
 
-extension ImageSearchViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        true
+private extension ImageSearchViewController {
+    
+    func setupNavigationBar() {
+        contentView.setSearchBarDelegate(self)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-//        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (action) -> UIMenu? in
-//            
-//            let download = UIAction(title: "Download", image: UIImage(systemName: "square.and.arrow.down"), identifier: nil, discoverabilityTitle: nil, state: .off) { (_) in
-//                print("edit button clicked")
-//            }
-//            
-//            return UIMenu(title: "Options", image: nil, identifier: nil, options: UIMenu.Options.displayInline, children: [download])
-//        }
-//        return configuration
-//    }
+    func setupNotifications() {
+        Notifier.notificationDelegate = self
+    }
 }
+
+
