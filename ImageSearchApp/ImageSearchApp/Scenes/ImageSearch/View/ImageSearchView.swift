@@ -105,7 +105,7 @@ private extension ImageSearchView {
         let doubleHorizontalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
         let doubleHorizontalGroup = NSCollectionLayoutGroup.vertical(layoutSize: doubleHorizontalGroupSize, subitems: [horizontalGroup, reversedHorizontalGroup])
         
-
+        
         let section = NSCollectionLayoutSection(group: doubleHorizontalGroup)
         let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -127,9 +127,6 @@ private extension ImageSearchView {
             collectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-            
-            
-            
         ])
     }
 }

@@ -42,11 +42,10 @@ class ImagePreviewViewController: UIViewController {
 }
 
 extension ImagePreviewViewController: IImagePreviewDelegate {
+    
     func updateImageView(with image: UIImage) {
         contentView.fullImageView.image = image
     }
-    
-    
 }
 
 private extension ImagePreviewViewController {

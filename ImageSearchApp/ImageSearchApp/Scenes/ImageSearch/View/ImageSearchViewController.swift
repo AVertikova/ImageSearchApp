@@ -142,11 +142,11 @@ extension ImageSearchViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            searchResultDelegate.imageSelected(at: indexPath.item)
+        searchResultDelegate.imageSelected(at: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-            searchResultDelegate.imageDeselected(at: indexPath.item)
+        searchResultDelegate.imageDeselected(at: indexPath.item)
     }
 }
 
@@ -222,5 +222,3 @@ private extension ImageSearchViewController {
         Notifier.notificationDelegate = self
     }
 }
-
-

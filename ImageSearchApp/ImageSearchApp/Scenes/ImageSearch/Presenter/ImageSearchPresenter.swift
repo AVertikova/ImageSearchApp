@@ -22,13 +22,13 @@ protocol IImageSearchPresenter {
 
 protocol IImageSearchResultDataSource {
     func getNumberOfRows() -> Int
-    func getCellForRow(at index: Int) -> ImageObject
+    func getCellForRow(at index: Int) -> ImageViewModel
 }
 
 protocol IImageSearchViewUpdateDelegate: AnyObject {
     func updateRow(at index: Int)
     func updateProgress(at index: Int, progress: Float, totalSize: String)
-    func updateDownloadedItem(with image: ImageObject)
+    func updateDownloadedItem(with image: ImageViewModel)
 }
 
 protocol IImageSearchResultDelegate {
@@ -41,9 +41,9 @@ final class ImageSearchPresenter: NSObject {
     weak var ui: IImageView?
     private var interactor: ImageSearchInteractor
     private var router: ImageSearchRouter
-    private var searchQuerry: String = ""
+    private var searchQuery: String = ""
     
-    private var searchResult: [ImageObject] = [] {
+    private var searchResult: [ImageViewModel] = [] {
         didSet {
             ui?.updateUI()
         }
@@ -64,13 +64,13 @@ extension ImageSearchPresenter: IImageSearchPresenter {
     
     func performNewSearch(with searchQuery: String) {
         self.searchResult = []
-        self.searchQuerry = searchQuery
+        self.searchQuery = searchQuery
         interactor.newSearchStarted()
         performSearch(with: searchQuery)
     }
     
     func updateSearchResult() {
-        performSearch(with: self.searchQuerry)
+        performSearch(with: self.searchQuery)
     }
     
     func configureCell(_ cell: SearchResultCell, at index: Int) {
@@ -122,7 +122,7 @@ extension ImageSearchPresenter: IImageSearchResultDataSource {
         return searchResult.count
     }
     
-    func getCellForRow(at index: Int) -> ImageObject {
+    func getCellForRow(at index: Int) -> ImageViewModel {
         return searchResult[index]
     }
 }
@@ -137,7 +137,7 @@ extension ImageSearchPresenter: IImageSearchViewUpdateDelegate {
         ui?.updateProgress(at: index, progress: progress, totalSize: totalSize)
     }
     
-    func updateDownloadedItem(with image: ImageObject) {
+    func updateDownloadedItem(with image: ImageViewModel) {
         
         if let index = searchResult.firstIndex(where: { $0.id == image.id }) {
             searchResult[index] = image
@@ -169,17 +169,18 @@ extension ImageSearchPresenter: IImageSearchResultDelegate {
     func imageSelected(at index: Int) {
         if searchResult[index].downloaded == false {
             ui?.showDownloadMenu(at: index)
-            
         } else {
             guard let sourceVC = self.ui as? ImageSearchViewController else {
                 fatalError(CommonError.failedToShowModalWindow)
             }
             interactor.getDownloadedImage(at: index) { [weak self] image, error in
                 
-                guard let image = image, error == nil else {
-                    Notifier.errorOccured(message: CommonError.failedToLoadData)
+                guard error == nil else {
+                    Notifier.errorOccured(message: error?.localizedDescription ?? "default")
                     return
                 }
+                
+                guard let image = image else { Notifier.errorOccured(message: "image"); return }
                 self?.router.showImageModally(with: image, at: sourceVC)
             }
         }
@@ -189,4 +190,3 @@ extension ImageSearchPresenter: IImageSearchResultDelegate {
         ui?.hideDownloadMenu(at: index)
     }
 }
-

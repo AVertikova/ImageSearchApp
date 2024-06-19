@@ -23,5 +23,3 @@ final class ImageSearchRouter {
         sourceVC.present(imageViewerNavigationController, animated: true)
     }
 }
-
-

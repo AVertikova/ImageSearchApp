@@ -8,7 +8,6 @@
 import UIKit
 
 final class SelectedImage {
-    
     var image: UIImage {
         didSet {
             delegate?.updateImageView(with: image)

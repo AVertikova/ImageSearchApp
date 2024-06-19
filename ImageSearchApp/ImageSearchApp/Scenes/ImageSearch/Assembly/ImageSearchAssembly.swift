@@ -13,12 +13,13 @@ enum ImageSearchAssembly {
         let navigationController: UINavigationController
         let networkService: INetworkService
         let downloadService: DownloadService
+        let dataService: IImageSearchDataService
     }
     
     static func createModule(with dependecies: Dependencies) -> ImageSearchViewController {
         
         let interactor = ImageSearchInteractor(downloadService: dependecies.downloadService,
-                                               networkService: dependecies.networkService)
+                                               networkService: dependecies.networkService, dataService: dependecies.dataService)
         let router = ImageSearchRouter(navigationController: dependecies.navigationController)
         let presenter = ImageSearchPresenter(interactor: interactor, router: router)
         let viewController = ImageSearchViewController(presenter: presenter, dataSource: presenter, delegate: presenter)

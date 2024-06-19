@@ -18,8 +18,6 @@ class ImagePreviewView: UIView {
         return button
     }()
     
-    
-    
     lazy var fullImageView: UIImageView = {
         let fullImage = UIImageView()
         fullImage.contentMode = .scaleAspectFit

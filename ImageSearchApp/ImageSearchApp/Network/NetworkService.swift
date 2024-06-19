@@ -25,24 +25,24 @@ extension NetworkService: INetworkService {
         urlSession.dataTask(with: request) { data, response, error in
             
             guard let response = response as? HTTPURLResponse, let data = data else { return }
+            
+            switch response.statusCode {
                 
-                switch response.statusCode {
-                    
-                case 200...299:
-                    if self.searchResultDataIsEmpty(data) {
-                        completion(.failure(NetworkError(code: -1000, description: "Images not found")))
-                    }
-                    completion(.success(data))
-                case 300...399: completion(.success(data))
-                case 400: completion(.failure(NetworkError(code: 400, description: "400: Bad Request")))
-                case 401: completion(.failure(NetworkError(code: 401, description: "401: Invalid Access Token")))
-                case 403: completion(.failure(NetworkError(code: 403, description: "403: Forbidden")))
-                case 404: completion(.failure(NetworkError(code: 404, description: "404: Not Found")))
-                case 405...499: completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Unknown error")))
-                case 500...599: completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Server error")))
-                default:
-                    completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Unknown error")))
+            case 200...299:
+                if self.searchResultDataIsEmpty(data) {
+                    completion(.failure(NetworkError(code: -1000, description: "Images not found")))
                 }
+                completion(.success(data))
+            case 300...399: completion(.success(data))
+            case 400: completion(.failure(NetworkError(code: 400, description: "400: Bad Request")))
+            case 401: completion(.failure(NetworkError(code: 401, description: "401: Invalid Access Token")))
+            case 403: completion(.failure(NetworkError(code: 403, description: "403: Forbidden")))
+            case 404: completion(.failure(NetworkError(code: 404, description: "404: Not Found")))
+            case 405...499: completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Unknown error")))
+            case 500...599: completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Server error")))
+            default:
+                completion(.failure(NetworkError(code: response.statusCode, description: "\(response.statusCode): Unknown error")))
+            }
             
         }.resume()
     }

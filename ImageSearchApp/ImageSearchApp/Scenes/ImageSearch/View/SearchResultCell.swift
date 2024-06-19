@@ -56,6 +56,7 @@ final class SearchResultCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(pauseOrResumeButtonTapped),
                          for: .touchUpInside)
         button.setTitle("Pause", for: .normal)
+        button.tintColor = .label
         return button
     }()
     
@@ -103,7 +104,7 @@ final class SearchResultCell: UICollectionViewCell {
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -158,8 +159,8 @@ extension SearchResultCell {
     }
     
     func updateProgress(progress: Float, totalSize : String) {
-                progressView.progress = progress
-                progressLabel.text = String(format: "%.1f%% of %@", progress * 100, totalSize)
+        progressView.progress = progress
+        progressLabel.text = String(format: "%.1f%% of %@", progress * 100, totalSize)
     }
     
     func showDownloadMenu() {
@@ -189,12 +190,6 @@ private extension SearchResultCell {
         contentView.addSubview(downloadMenuStackView)
         contentView.addSubview(downloadControlStackView)
         
-        //        contentView.addSubview(downloadButton)
-        //        contentView.addSubview(pauseOrResumeButton)
-        //        contentView.addSubview(cancelButton)
-        //        contentView.addSubview(progressLabel)
-        //        contentView.addSubview(progressView)
-        
         NSLayoutConstraint.activate([
             
             resultImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
@@ -210,30 +205,11 @@ private extension SearchResultCell {
             downloadControlStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             downloadControlStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             
+            progressView.widthAnchor.constraint(equalTo: downloadMenuStackView.widthAnchor, multiplier: 1),
+            progressView.heightAnchor.constraint(equalToConstant: 6),
             
-            
-            //            downloadButton.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 24),
-            //            downloadButton.centerXAnchor.constraint(equalTo: resultImageView.centerXAnchor),
-            //            downloadButton.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor, constant: 4)
-            
-            //            contentStackView.centerYAnchor.constraint(equalTo: contentView.layoutMarginsGuide.centerYAnchor),
-            //            contentStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            //            contentStackView.heightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.heightAnchor),
-            //            contentStackView.widthAnchor.constraint(equalTo: contentView.layoutMarginsGuide.heightAnchor),
-            
-            //            pauseOrResumeButton.leadingAnchor.constraint(equalTo: resultImageView.trailingAnchor, constant: 34),
-            //            pauseOrResumeButton.centerYAnchor.constraint(equalTo: contentView.layoutMarginsGuide.centerYAnchor),
-            //
-            //            cancelButton.leadingAnchor.constraint(equalTo: pauseOrResumeButton.trailingAnchor, constant: 4),
-            //            cancelButton.centerYAnchor.constraint(equalTo: contentView.layoutMarginsGuide.centerYAnchor),
-            //
-            //            progressLabel.centerXAnchor.constraint(equalTo: downloadButton.centerXAnchor),
-            //            progressLabel.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
-            //
-            //            progressView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor, constant: -8),
-            //            progressView.topAnchor.constraint(equalTo: pauseOrResumeButton.bottomAnchor, constant: 8),
-            //            progressView.heightAnchor.constraint(equalToConstant: 8),
-            //            progressView.widthAnchor.constraint(equalToConstant: 150),
+            pauseOrResumeButton.trailingAnchor.constraint(equalTo: downloadMenuStackView.centerXAnchor, constant: -16),
+            cancelButton.leadingAnchor.constraint(equalTo: pauseOrResumeButton.trailingAnchor, constant: 12)
             
         ])
     }
@@ -242,7 +218,7 @@ private extension SearchResultCell {
 private extension SearchResultCell {
     
     @objc func downloadButtonTapped() {
-      delegate?.downloadTapped(self)
+        delegate?.downloadTapped(self)
     }
     
     @objc func previewButtonTapped() {
@@ -267,9 +243,6 @@ private extension SearchResultCell {
         button.tintColor = .darkGray
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
-//        button.setImage(resultImageView.image, for: .normal)
-        button.isUserInteractionEnabled = true
-        button.isEnabled = true
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button

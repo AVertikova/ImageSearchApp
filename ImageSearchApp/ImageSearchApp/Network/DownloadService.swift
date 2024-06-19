@@ -15,7 +15,7 @@ final class DownloadService {
 
 extension DownloadService {
     
-    func startDownload(_ image: ImageObject) {
+    func startDownload(_ image: ImageViewModel) {
         let downloadItem = DownloadItem(image: image)
         downloadItem.task = downloadsSession?.downloadTask(with: image.downloadURL)
         downloadItem.task?.resume()
@@ -23,7 +23,7 @@ extension DownloadService {
         activeDownloads[downloadItem.image.downloadURL] = downloadItem
     }
     
-    func pauseDownload(_ image: ImageObject) {
+    func pauseDownload(_ image: ImageViewModel) {
         guard let downloadItem = activeDownloads[image.downloadURL],
               downloadItem.isDownloading else {
             return
@@ -37,7 +37,7 @@ extension DownloadService {
         
     }
     
-    func resumeDownload(_ image: ImageObject) {
+    func resumeDownload(_ image: ImageViewModel) {
         guard let downloadItem = activeDownloads[image.downloadURL] else {
             return
         }
@@ -52,7 +52,7 @@ extension DownloadService {
         downloadItem.isDownloading = true
     }
     
-    func cancelDownload(_ image: ImageObject) {
+    func cancelDownload(_ image: ImageViewModel) {
         guard let downloadItem = activeDownloads[image.downloadURL] else {
             return
         }
