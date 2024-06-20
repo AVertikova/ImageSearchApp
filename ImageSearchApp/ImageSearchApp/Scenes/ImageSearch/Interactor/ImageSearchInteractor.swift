@@ -9,12 +9,12 @@ import UIKit
 
 protocol IImageSearchInteractor {
     func newSearchStarted()
-    func requestData(with searchQuery: String, completion: @escaping ([ImageViewModel]?, Error?) -> Void)
+    func requestData(with searchQuery: String, completion: @escaping ([SearchResultImageViewModel]?, Error?) -> Void)
     
-    func startDownload(_ image: ImageViewModel)
-    func pauseDownload(_ image: ImageViewModel)
-    func resumeDownload(_ image: ImageViewModel)
-    func cancelDownload(_ image: ImageViewModel)
+    func startDownload(_ image: SearchResultImageViewModel)
+    func pauseDownload(_ image: SearchResultImageViewModel)
+    func resumeDownload(_ image: SearchResultImageViewModel)
+    func cancelDownload(_ image: SearchResultImageViewModel)
     
     func getDownloadedImage(at index: Int, completion: @escaping (UIImage?, Error?) -> Void)
 }
@@ -39,7 +39,7 @@ final class ImageSearchInteractor: NSObject {
     }()
     
     private var results: [ResposeResult] = []
-    private var images: [ImageViewModel] = []
+    private var images: [SearchResultImageViewModel] = []
     
     init(downloadService: DownloadService, networkService: INetworkService, dataService: IImageSearchDataService) {
         self.downloadService = downloadService
@@ -56,7 +56,7 @@ extension ImageSearchInteractor: IImageSearchInteractor {
         self.queryResultPageNumber = 1
     }
     
-    func requestData(with searchQuery: String, completion: @escaping ([ImageViewModel]?, Error?) -> Void ) {
+    func requestData(with searchQuery: String, completion: @escaping ([SearchResultImageViewModel]?, Error?) -> Void ) {
         guard self.queryResultPageNumber <= queryResultTotalPages else { return }
         self.query = searchQuery
         networkService.getSearchResults(searchQuery: searchQuery, pageNumber: self.queryResultPageNumber) { [weak self] response in
@@ -86,24 +86,24 @@ extension ImageSearchInteractor: IImageSearchInteractor {
         }
     }
     
-    func getDownloadItem(for imageObject: ImageViewModel) -> DownloadItem? {
+    func getDownloadItem(for imageObject: SearchResultImageViewModel) -> DownloadItem? {
         return downloadService.activeDownloads[imageObject.downloadURL]
     }
     
-    func startDownload(_ image: ImageViewModel) {
+    func startDownload(_ image: SearchResultImageViewModel) {
         downloadService.downloadsSession = downloadsSession
         downloadService.startDownload(image)
     }
     
-    func pauseDownload(_ image: ImageViewModel) {
+    func pauseDownload(_ image: SearchResultImageViewModel) {
         downloadService.pauseDownload(image)
     }
     
-    func resumeDownload(_ image: ImageViewModel) {
+    func resumeDownload(_ image: SearchResultImageViewModel) {
         downloadService.resumeDownload(image)
     }
     
-    func cancelDownload(_ image: ImageViewModel) {
+    func cancelDownload(_ image: SearchResultImageViewModel) {
         downloadService.cancelDownload(image)
     }
     
@@ -168,14 +168,14 @@ extension ImageSearchInteractor: URLSessionDownloadDelegate {
 
 private extension ImageSearchInteractor {
     
-    func getPreviewImages(completion: @escaping (ImageViewModel?, Error?) -> Void ) {
+    func getPreviewImages(completion: @escaping (SearchResultImageViewModel?, Error?) -> Void ) {
         for (index, result) in results.enumerated() {
             networkService.getPreviewImage(with: result.urls.regular) { image, error in
                 if let image = image, error == nil {
                     guard let previewURL = URL(string: result.urls.regular),
                           let downloadURL = URL(string: result.urls.regular) else { return }
                     
-                    let image = ImageViewModel(index: index, id: result.id, previewURL: previewURL, downloadURL: downloadURL, cathegory: self.query, image: image)
+                    let image = SearchResultImageViewModel(index: index, id: result.id, previewURL: previewURL, downloadURL: downloadURL, cathegory: self.query, image: image)
                     completion (image, nil)
                 } else {
                     completion (nil, error)

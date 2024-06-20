@@ -80,7 +80,6 @@ private extension NetworkService {
             
             return nil
         }
-        print(baseUrlComponent)
         return URLRequest(url: baseUrlComponent)
     }
     

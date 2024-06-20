@@ -14,21 +14,24 @@ protocol IImageSearchPresenter {
     func configureCell(_ cell: SearchResultCell, at index: Int)
     
     func showImagePreview(at index: Int)
+    func showGallery()
+    
     func startDownloadImage(at index: Int)
     func pauseDownloadImage(at index: Int)
     func resumeDownloadImage(at index: Int)
     func cancelDownloadImage(at index: Int)
+    
 }
 
 protocol IImageSearchResultDataSource {
     func getNumberOfRows() -> Int
-    func getCellForRow(at index: Int) -> ImageViewModel
+    func getCellForRow(at index: Int) -> SearchResultImageViewModel
 }
 
 protocol IImageSearchViewUpdateDelegate: AnyObject {
     func updateRow(at index: Int)
     func updateProgress(at index: Int, progress: Float, totalSize: String)
-    func updateDownloadedItem(with image: ImageViewModel)
+    func updateDownloadedItem(with image: SearchResultImageViewModel)
 }
 
 protocol IImageSearchResultDelegate {
@@ -43,7 +46,7 @@ final class ImageSearchPresenter: NSObject {
     private var router: ImageSearchRouter
     private var searchQuery: String = ""
     
-    private var searchResult: [ImageViewModel] = [] {
+    private var searchResult: [SearchResultImageViewModel] = [] {
         didSet {
             ui?.updateUI()
         }
@@ -94,6 +97,10 @@ extension ImageSearchPresenter: IImageSearchPresenter {
         router.showImageModally(with: image, at: sourceVC)
     }
     
+    func showGallery() {
+        router.showGallery()
+    }
+    
     func startDownloadImage(at index: Int) {
         let image = searchResult[index]
         interactor.startDownload(image)
@@ -122,7 +129,7 @@ extension ImageSearchPresenter: IImageSearchResultDataSource {
         return searchResult.count
     }
     
-    func getCellForRow(at index: Int) -> ImageViewModel {
+    func getCellForRow(at index: Int) -> SearchResultImageViewModel {
         return searchResult[index]
     }
 }
@@ -137,7 +144,7 @@ extension ImageSearchPresenter: IImageSearchViewUpdateDelegate {
         ui?.updateProgress(at: index, progress: progress, totalSize: totalSize)
     }
     
-    func updateDownloadedItem(with image: ImageViewModel) {
+    func updateDownloadedItem(with image: SearchResultImageViewModel) {
         
         if let index = searchResult.firstIndex(where: { $0.id == image.id }) {
             searchResult[index] = image

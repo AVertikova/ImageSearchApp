@@ -65,11 +65,12 @@ class ImageSearchViewController: UIViewController {
         super.viewDidLoad()
         presenter.didLoad(ui: self)
         setupNotifications()
+        setShowGalleryButtonTappedEvent()
     }
     
     override func loadView() {
         view = contentView
-        navigationItem.title = "Search"
+        navigationItem.title = "ImageSearch"
     }
 }
 
@@ -220,5 +221,11 @@ private extension ImageSearchViewController {
     
     func setupNotifications() {
         Notifier.notificationDelegate = self
+    }
+    
+    func setShowGalleryButtonTappedEvent() {
+        contentView.showGalleryButtonHandler = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
     }
 }

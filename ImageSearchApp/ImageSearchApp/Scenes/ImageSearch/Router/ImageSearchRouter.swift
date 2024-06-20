@@ -22,4 +22,8 @@ final class ImageSearchRouter {
         let imageViewerNavigationController = UINavigationController(rootViewController: destinationVC)
         sourceVC.present(imageViewerNavigationController, animated: true)
     }
+    
+    func showGallery() {
+        
+    }
 }

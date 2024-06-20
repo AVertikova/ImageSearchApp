@@ -1,32 +1,14 @@
 //
-//  ImageSearchView.swift
+//  ImagesGalleryView.swift
 //  ImageSearchApp
 //
-//  Created by Анна Вертикова on 18.06.2024.
+//  Created by Анна Вертикова on 20.06.2024.
 //
 
 import UIKit
 
-final class ImageSearchView: UIView {
-    var showGalleryButtonHandler: (()->Void)?
-    
-    lazy var showGalleryButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: .close,
-                                     target: self,
-                                     action: #selector(galleryButtonTapped))
-        return button
-    }()
-    
-    var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search image with keyword..."
-        searchBar.searchBarStyle = UISearchBar.Style.default
-        searchBar.sizeToFit()
-        searchBar.isTranslucent = false
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        return searchBar
-    }()
-    
+class ImagesGalleryView: UIView {
+
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: SearchResultCell.identifier)
@@ -36,8 +18,6 @@ final class ImageSearchView: UIView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-    
-    lazy var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     
     init() {
         super.init(frame: .zero)
@@ -50,11 +30,7 @@ final class ImageSearchView: UIView {
     }
 }
 
-extension ImageSearchView {
-    
-    func setSearchBarDelegate(_ delegate: UISearchBarDelegate) {
-        searchBar.delegate = delegate
-    }
+extension ImagesGalleryView {
     
     func setCollectionViewDelegate(_ delegate: UICollectionViewDelegate) {
         collectionView.delegate = delegate
@@ -69,28 +45,9 @@ extension ImageSearchView {
             self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
     }
-    
-    func updateProgress(at index: Int, progress: Float, totalSize: String) {
-        DispatchQueue.main.async { [weak self] in
-            if let cell = self?.collectionView.cellForItem(at: IndexPath(row: index,
-                                                                         section: 0)) as? SearchResultCell {
-                cell.updateProgress(progress: progress, totalSize: totalSize)
-            }
-        }
-    }
-    
-    func showActivityIndicator() {
-        addSubview(activityIndicator)
-        activityIndicator.center = center
-        activityIndicator.startAnimating()
-    }
-    
-    func hideActivityIndicator() {
-        activityIndicator.stopAnimating()
-    }
 }
 
-private extension ImageSearchView {
+private extension ImagesGalleryView {
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1))
@@ -122,23 +79,14 @@ private extension ImageSearchView {
     
     func setConstraints() {
         backgroundColor = .systemBackground
-        addSubview(searchBar)
+       
         addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-            searchBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 44),
-            
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
-    }
-    
-    @objc func galleryButtonTapped() {
-        showGalleryButtonHandler?()
     }
 }

@@ -52,7 +52,6 @@ private extension ImagePreviewViewController {
     
     func setupView() {
         view.backgroundColor = .white
-        contentView.setupLayout()
         setupNavigationBar()
     }
     

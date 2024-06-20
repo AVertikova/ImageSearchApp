@@ -24,17 +24,21 @@ class ImagePreviewView: UIView {
         fullImage.translatesAutoresizingMaskIntoConstraints = false
         return fullImage
     }()
-}
-
-extension ImagePreviewView {
-    func setupLayout() {
-        setupView()
+    
+    init() {
+        super.init(frame: .zero)
+        setConstraints()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError(CommonError.requiredInitError)
     }
 }
 
 private extension ImagePreviewView {
     
-    func setupView() {
+    func setConstraints() {
         addSubview(fullImageView)
         
         NSLayoutConstraint.activate([

@@ -10,15 +10,14 @@ import CoreData
 import UIKit
 
 protocol IImageSearchDataService {
-    func save(image: ImageViewModel)
+    func save(image: SearchResultImageViewModel)
 }
 
 protocol IDownloadedImagesDataService {
-    func fetchImages(completion: ([DownloadedImageViewModel]?, Error?) -> Void)
+    func fetchImages(completion: ([GalleryImageViewModel]?, Error?) -> Void)
 }
 
 final class CoreDataService {
-    
     private let entityName = "ImageEntity"
     
     let persistentContainer: NSPersistentContainer = {
@@ -34,7 +33,7 @@ final class CoreDataService {
 
 extension CoreDataService: IImageSearchDataService {
     
-    func save(image: ImageViewModel) {
+    func save(image: SearchResultImageViewModel) {
         persistentContainer.performBackgroundTask { context in
             let entity = ImageEntity(context: context)
             entity.id = UUID()
@@ -49,14 +48,14 @@ extension CoreDataService: IImageSearchDataService {
 
 extension CoreDataService: IDownloadedImagesDataService {
     
-    func fetchImages(completion: ([DownloadedImageViewModel]?, Error?) -> Void) {
+    func fetchImages(completion: ([GalleryImageViewModel]?, Error?) -> Void) {
         let context = persistentContainer.viewContext
         let fetchRequest = ImageEntity.fetchRequest()
         
         do {
             let images = try context.fetch(fetchRequest)
             completion(images.map {
-                DownloadedImageViewModel(id: $0.id, image: UIImage(data: $0.imageData), cathegory: $0.cathegory)
+                GalleryImageViewModel(id: $0.id, image: UIImage(data: $0.imageData) ?? UIImage(), cathegory: $0.cathegory)
             }, nil)
         } catch {
             completion(nil, error)
