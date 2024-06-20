@@ -7,8 +7,7 @@
 
 import UIKit
 
-struct SearchResultImageViewModel: Equatable {
-    let index: Int
+struct SearchResultImageDTO: Equatable, Hashable {
     let id: String
     let previewURL: URL
     let downloadURL: URL
@@ -16,3 +15,4 @@ struct SearchResultImageViewModel: Equatable {
     let image: UIImage?
     var downloaded = false
 }
+

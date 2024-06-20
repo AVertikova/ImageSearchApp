@@ -18,5 +18,5 @@ struct ResposeResult: Codable {
 
 struct URLS: Codable {
     let full: String
-    let regular: String
+    let small: String
 }

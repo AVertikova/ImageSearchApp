@@ -11,17 +11,19 @@ protocol INotifierDelegate {
     func showAlert(message: String)
 }
 
-final class Notifier {
-    static let shared = Notifier()
+enum Notifier {
+    static var imageSearchNotifier: INotifierDelegate?
+    static var imagesGalleryNotifier: INotifierDelegate?
     
-    static var notificationDelegate: INotifierDelegate?
-    
-    private init() {}
-    
-    static func errorOccured(message: String) {
+    static func imageSearchErrorOccured(message: String) {
         DispatchQueue.main.async {
-            notificationDelegate?.showAlert(message: message)
+            imageSearchNotifier?.showAlert(message: message)
         }
     }
     
+    static func imagesGalleryErrorOccured(message: String) {
+        DispatchQueue.main.async {
+            imageSearchNotifier?.showAlert(message: message)
+        }
+    }
 }

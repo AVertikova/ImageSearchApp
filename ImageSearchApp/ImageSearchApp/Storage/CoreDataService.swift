@@ -10,7 +10,7 @@ import CoreData
 import UIKit
 
 protocol IImageSearchDataService {
-    func save(image: SearchResultImageViewModel)
+    func save(image: SearchResultImageDTO)
 }
 
 protocol IDownloadedImagesDataService {
@@ -33,7 +33,7 @@ final class CoreDataService {
 
 extension CoreDataService: IImageSearchDataService {
     
-    func save(image: SearchResultImageViewModel) {
+    func save(image: SearchResultImageDTO) {
         persistentContainer.performBackgroundTask { context in
             let entity = ImageEntity(context: context)
             entity.id = UUID()

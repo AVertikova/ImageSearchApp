@@ -11,7 +11,7 @@ import UIKit
 final class SearchResultCell: UICollectionViewCell {
     
     static let identifier = String(describing: SearchResultCell.self)
-    var delegate: ICellButtonsHandler?
+    var delegate: IImageSearchCellButtonsHandler?
     
     private var downloadingPaused = false
     
@@ -124,7 +124,7 @@ final class SearchResultCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
-        setupView()
+        setupAppearance()
     }
     
     
@@ -179,13 +179,13 @@ extension SearchResultCell {
 
 private extension SearchResultCell {
     
-    func setupView() {
+    func setupAppearance() {
         downloadMenuStackView.isHidden = true
         downloadControlStackView.isHidden = true
-        setupLayout()
+        setConstraints()
     }
     
-    func setupLayout() {
+    func setConstraints() {
         contentView.addSubview(resultImageView)
         contentView.addSubview(downloadMenuStackView)
         contentView.addSubview(downloadControlStackView)

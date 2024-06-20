@@ -16,11 +16,10 @@ enum ImagesGalleryAssembly {
     
     static func createModule(with dependecies: Dependencies) -> ImagesGalleryViewController {
         
-        let interactor = ImagesGalleryInteractor(downloadService: dependecies.downloadService,
-                                               networkService: dependecies.networkService, dataService: dependecies.dataService)
+        let interactor = ImagesGalleryInteractor(dataService: dependecies.dataService)
         let router = ImagesGalleryRouter(navigationController: dependecies.navigationController)
         let presenter = ImagesGalleryPresenter(interactor: interactor, router: router)
-        let viewController = ImagesGalleryViewController(presenter: presenter, dataSource: presenter, delegate: presenter)
+        let viewController = ImagesGalleryViewController(presenter: presenter, imagesGalleryDataSource: presenter, imagesGalleryDelegate: presenter)
         
         return viewController
     }

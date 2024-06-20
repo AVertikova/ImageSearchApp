@@ -13,9 +13,9 @@ final class DownloadItem {
     var progress: Float = 0
     var resumeData: Data?
     var task: URLSessionDownloadTask?
-    var image: SearchResultImageViewModel
+    var imageDTO: SearchResultImageDTO
     
-    init(image: SearchResultImageViewModel) {
-        self.image = image
+    init(image: SearchResultImageDTO) {
+        self.imageDTO = image
     }
 }

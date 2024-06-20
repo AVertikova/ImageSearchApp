@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol IImageView: AnyObject {
-    func updateUI()
-    func updateRows(at index: Int)
+protocol IImageSearchView: AnyObject {
+    func update()
+    func updateItem(at index: Int)
     func updateProgress(at index: Int, progress: Float, totalSize: String)
     
     func showActivityIndicator()
@@ -19,14 +19,13 @@ protocol IImageView: AnyObject {
     func hideDownloadMenu(at index: Int)
 }
 
-protocol ICellButtonsHandler {
+protocol IImageSearchCellButtonsHandler {
     func downloadTapped(_ cell: SearchResultCell)
     func previewTapped(_ cell: SearchResultCell)
     func pauseTapped(_ cell: SearchResultCell)
     func resumeTapped(_ cell: SearchResultCell)
     func cancelTapped(_ cell: SearchResultCell)
 }
-
 
 class ImageSearchViewController: UIViewController {
     
@@ -35,6 +34,7 @@ class ImageSearchViewController: UIViewController {
     private let searchResultDelegate: IImageSearchResultDelegate
     
     private var searchBar: UISearchBar = UISearchBar()
+    private var pageLoaded: Int = 1
     
     private lazy var contentView: ImageSearchView = {
         let view = ImageSearchView()
@@ -64,27 +64,25 @@ class ImageSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.didLoad(ui: self)
-        setupNotifications()
-        setShowGalleryButtonTappedEvent()
+        setupAppearance()
     }
     
     override func loadView() {
         view = contentView
-        navigationItem.title = "ImageSearch"
     }
 }
 
-extension ImageSearchViewController: IImageView {
+extension ImageSearchViewController: IImageSearchView {
     
-    func updateRows(at index: Int) {
-        contentView.updateRows(at: index)
+    func updateItem(at index: Int) {
+        contentView.updateItem(at: index)
     }
     
     func updateProgress(at index: Int, progress: Float, totalSize: String) {
         contentView.updateProgress(at: index, progress: progress, totalSize: totalSize)
     }
     
-    func updateUI() {
+    func update() {
         DispatchQueue.main.async {
             self.contentView.collectionView.reloadData()
         }
@@ -112,6 +110,7 @@ extension ImageSearchViewController: IImageView {
 }
 
 extension ImageSearchViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         searchResultDataSource.getNumberOfRows()
     }
@@ -131,7 +130,8 @@ extension ImageSearchViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == searchResultDataSource.getNumberOfRows() - 1 {
-            presenter.updateSearchResult()
+            pageLoaded += 1
+            presenter.updateSearchResult(at: pageLoaded)
         }
     }
 }
@@ -151,44 +151,6 @@ extension ImageSearchViewController: UICollectionViewDelegate {
     }
 }
 
-extension ImageSearchViewController: ICellButtonsHandler {
-    
-    func downloadTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            presenter.startDownloadImage(at: indexPath.row)
-            contentView.updateRows(at: indexPath.row)
-        }
-    }
-    
-    func previewTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            presenter.showImagePreview(at: indexPath.row)
-            contentView.updateRows(at: indexPath.row)
-        }
-    }
-    
-    func pauseTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            presenter.pauseDownloadImage(at: indexPath.row)
-            contentView.updateRows(at: indexPath.row)
-        }
-    }
-    
-    func resumeTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            presenter.resumeDownloadImage(at: indexPath.row)
-            contentView.updateRows(at: indexPath.row)
-        }
-    }
-    
-    func cancelTapped(_ cell: SearchResultCell) {
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            presenter.cancelDownloadImage(at: indexPath.row)
-            contentView.updateRows(at: indexPath.row)
-        }
-    }
-}
-
 extension ImageSearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -196,7 +158,47 @@ extension ImageSearchViewController: UISearchBarDelegate {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             return
         }
-        presenter.performNewSearch(with: searchText)
+        pageLoaded = 1
+        presenter.performNewSearch(with: searchText, at: pageLoaded)
+    }
+}
+
+
+extension ImageSearchViewController: IImageSearchCellButtonsHandler {
+    
+    func downloadTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.startDownloadImage(at: indexPath.row)
+            contentView.updateItem(at: indexPath.row)
+        }
+    }
+    
+    func previewTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.showImagePreview(at: indexPath.row)
+            contentView.updateItem(at: indexPath.row)
+        }
+    }
+    
+    func pauseTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.pauseDownloadImage(at: indexPath.row)
+            contentView.updateItem(at: indexPath.row)
+        }
+    }
+    
+    func resumeTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.resumeDownloadImage(at: indexPath.row)
+            contentView.updateItem(at: indexPath.row)
+        }
+    }
+    
+    func cancelTapped(_ cell: SearchResultCell) {
+        if let indexPath = contentView.collectionView.indexPath(for: cell) {
+            presenter.cancelDownloadImage(at: indexPath.row)
+            contentView.updateItem(at: indexPath.row)
+        }
     }
 }
 
@@ -215,17 +217,25 @@ extension ImageSearchViewController: INotifierDelegate {
 
 private extension ImageSearchViewController {
     
-    func setupNavigationBar() {
-        contentView.setSearchBarDelegate(self)
+    func setupAppearance() {
+        setupNavigationBar()
+        setupNotifications()
+        setShowGalleryButtonTappedEvent()
     }
     
+    func setupNavigationBar() {
+        navigationItem.title = "ImageSearch"
+        navigationItem.rightBarButtonItem = contentView.showGalleryButton
+    }
+    
+    
     func setupNotifications() {
-        Notifier.notificationDelegate = self
+        Notifier.imageSearchNotifier = self
     }
     
     func setShowGalleryButtonTappedEvent() {
         contentView.showGalleryButtonHandler = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            self?.presenter.showGallery()
         }
     }
 }

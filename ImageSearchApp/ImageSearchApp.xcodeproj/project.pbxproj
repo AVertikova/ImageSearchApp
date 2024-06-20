@@ -21,6 +21,7 @@
 		EB927DE22C240781000C882B /* ImagesGalleryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DE12C240781000C882B /* ImagesGalleryInteractor.swift */; };
 		EB927DE42C24078F000C882B /* ImagesGalleryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DE32C24078F000C882B /* ImagesGalleryPresenter.swift */; };
 		EB927DE62C24083D000C882B /* ImagesGalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DE52C24083D000C882B /* ImagesGalleryCell.swift */; };
+		EB927DE92C240EE0000C882B /* ImagesGalleryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DE82C240EE0000C882B /* ImagesGalleryRouter.swift */; };
 		EBA533F82C2142AE00C4093A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA533F72C2142AE00C4093A /* AppDelegate.swift */; };
 		EBA533FA2C2142AE00C4093A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA533F92C2142AE00C4093A /* SceneDelegate.swift */; };
 		EBA534022C2142AE00C4093A /* ImageSearchApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBA534002C2142AE00C4093A /* ImageSearchApp.xcdatamodeld */; };
@@ -32,7 +33,7 @@
 		EBA534272C2146C500C4093A /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534262C2146C500C4093A /* SearchResultCell.swift */; };
 		EBA534292C21471000C4093A /* ImageSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534282C21471000C4093A /* ImageSearchInteractor.swift */; };
 		EBA5342B2C21473E00C4093A /* ImageSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342A2C21473E00C4093A /* ImageSearchPresenter.swift */; };
-		EBA5342D2C21476000C4093A /* SearchResultImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342C2C21476000C4093A /* SearchResultImageViewModel.swift */; };
+		EBA5342D2C21476000C4093A /* SearchResultImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342C2C21476000C4093A /* SearchResultImageDTO.swift */; };
 		EBA5342F2C21479000C4093A /* ImageSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5342E2C21479000C4093A /* ImageSearchRouter.swift */; };
 		EBA534322C2147DE00C4093A /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534312C2147DE00C4093A /* DownloadItem.swift */; };
 		EBA534342C2147F500C4093A /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534332C2147F500C4093A /* DownloadService.swift */; };
@@ -41,7 +42,6 @@
 		EBA5343A2C21485000C4093A /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534392C21485000C4093A /* NetworkError.swift */; };
 		EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5343B2C21487A00C4093A /* Notifier.swift */; };
 		EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */; };
-		EBA534452C21709900C4093A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA534442C21709900C4093A /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +59,7 @@
 		EB927DE12C240781000C882B /* ImagesGalleryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryInteractor.swift; sourceTree = "<group>"; };
 		EB927DE32C24078F000C882B /* ImagesGalleryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryPresenter.swift; sourceTree = "<group>"; };
 		EB927DE52C24083D000C882B /* ImagesGalleryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryCell.swift; sourceTree = "<group>"; };
+		EB927DE82C240EE0000C882B /* ImagesGalleryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryRouter.swift; sourceTree = "<group>"; };
 		EBA533F42C2142AE00C4093A /* ImageSearchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageSearchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBA533F72C2142AE00C4093A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EBA533F92C2142AE00C4093A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,7 +73,7 @@
 		EBA534262C2146C500C4093A /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		EBA534282C21471000C4093A /* ImageSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchInteractor.swift; sourceTree = "<group>"; };
 		EBA5342A2C21473E00C4093A /* ImageSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchPresenter.swift; sourceTree = "<group>"; };
-		EBA5342C2C21476000C4093A /* SearchResultImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultImageViewModel.swift; sourceTree = "<group>"; };
+		EBA5342C2C21476000C4093A /* SearchResultImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultImageDTO.swift; sourceTree = "<group>"; };
 		EBA5342E2C21479000C4093A /* ImageSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchRouter.swift; sourceTree = "<group>"; };
 		EBA534312C2147DE00C4093A /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
 		EBA534332C2147F500C4093A /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		EBA534392C21485000C4093A /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		EBA5343B2C21487A00C4093A /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		EBA534412C214B5400C4093A /* ImageSearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchAssembly.swift; sourceTree = "<group>"; };
-		EBA534442C21709900C4093A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +171,14 @@
 			path = Interactor;
 			sourceTree = "<group>";
 		};
+		EB927DE72C240CF1000C882B /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				EB927DE82C240EE0000C882B /* ImagesGalleryRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
 		EBA533EB2C2142AE00C4093A = {
 			isa = PBXGroup;
 			children = (
@@ -191,7 +199,6 @@
 			isa = PBXGroup;
 			children = (
 				EB927DC12C2336F8000C882B /* Storage */,
-				EBA534432C21708800C4093A /* Navigation */,
 				EBA5340E2C21439C00C4093A /* App */,
 				EBA534302C2147C700C4093A /* Network */,
 				EBA5341E2C21461E00C4093A /* Errors */,
@@ -253,6 +260,7 @@
 				EB927DDA2C240422000C882B /* Interactor */,
 				EB927DD92C24041C000C882B /* Presenter */,
 				EB927DD62C240403000C882B /* Entities */,
+				EB927DE72C240CF1000C882B /* Router */,
 			);
 			path = ImagesGallery;
 			sourceTree = "<group>";
@@ -325,17 +333,9 @@
 		EBA534402C214B0200C4093A /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				EBA5342C2C21476000C4093A /* SearchResultImageViewModel.swift */,
+				EBA5342C2C21476000C4093A /* SearchResultImageDTO.swift */,
 			);
 			path = Entities;
-			sourceTree = "<group>";
-		};
-		EBA534432C21708800C4093A /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				EBA534442C21709900C4093A /* TabBarController.swift */,
-			);
-			path = Navigation;
 			sourceTree = "<group>";
 		};
 		EBA534462C217EFF00C4093A /* Assembly */ = {
@@ -431,12 +431,12 @@
 				EBA534362C21481700C4093A /* NetworkService.swift in Sources */,
 				EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */,
 				EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */,
-				EBA534452C21709900C4093A /* TabBarController.swift in Sources */,
 				EBA534252C2146A500C4093A /* ImageSearchView.swift in Sources */,
 				EBA534382C21483B00C4093A /* APIResponse.swift in Sources */,
 				EBA533F82C2142AE00C4093A /* AppDelegate.swift in Sources */,
 				EB927DC32C23371E000C882B /* CoreDataService.swift in Sources */,
 				EBA534322C2147DE00C4093A /* DownloadItem.swift in Sources */,
+				EB927DE92C240EE0000C882B /* ImagesGalleryRouter.swift in Sources */,
 				EB927DE42C24078F000C882B /* ImagesGalleryPresenter.swift in Sources */,
 				EB5FC92E2C22A68D006DA6E7 /* ImagePreviewModel.swift in Sources */,
 				EB927DE02C24076F000C882B /* ImagesGalleryView.swift in Sources */,
@@ -447,7 +447,7 @@
 				EBA534342C2147F500C4093A /* DownloadService.swift in Sources */,
 				EBA533FA2C2142AE00C4093A /* SceneDelegate.swift in Sources */,
 				EB5FC9302C22A69A006DA6E7 /* ImagePreviewAssembly.swift in Sources */,
-				EBA5342D2C21476000C4093A /* SearchResultImageViewModel.swift in Sources */,
+				EBA5342D2C21476000C4093A /* SearchResultImageDTO.swift in Sources */,
 				EBA534202C21463100C4093A /* CommonError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

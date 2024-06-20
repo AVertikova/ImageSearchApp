@@ -11,9 +11,9 @@ final class ImageSearchView: UIView {
     var showGalleryButtonHandler: (()->Void)?
     
     lazy var showGalleryButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: .close,
-                                     target: self,
-                                     action: #selector(galleryButtonTapped))
+        let button = UIBarButtonItem(image: UIImage(systemName: "photo.on.rectangle.angled"),
+                                     style: .plain, target: self, action: #selector(galleryButtonTapped))
+        button.tintColor = .label
         return button
     }()
     
@@ -64,7 +64,7 @@ extension ImageSearchView {
         collectionView.dataSource = dataSource
     }
     
-    func updateRows(at index: Int) {
+    func updateItem(at index: Int) {
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }

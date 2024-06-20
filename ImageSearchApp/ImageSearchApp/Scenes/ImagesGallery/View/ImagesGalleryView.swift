@@ -21,7 +21,7 @@ class ImagesGalleryView: UIView {
     
     init() {
         super.init(frame: .zero)
-        setConstraints()
+        setupAppearance()
     }
     
     @available(*, unavailable)
@@ -40,7 +40,7 @@ extension ImagesGalleryView {
         collectionView.dataSource = dataSource
     }
     
-    func updateRows(at index: Int) {
+    func updateItem(at index: Int) {
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
@@ -77,9 +77,12 @@ private extension ImagesGalleryView {
         return layout
     }
     
+    func setupAppearance() {
+        backgroundColor = .white
+        setConstraints()
+    }
+    
     func setConstraints() {
-        backgroundColor = .systemBackground
-       
         addSubview(collectionView)
         
         NSLayoutConstraint.activate([
