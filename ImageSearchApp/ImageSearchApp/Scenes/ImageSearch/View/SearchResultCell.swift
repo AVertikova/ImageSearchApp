@@ -30,6 +30,7 @@ final class SearchResultCell: UICollectionViewCell {
         button.tintColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = button.frame.size.width/2
+        button.isEnabled = false
         button.clipsToBounds = true
         
         return button
@@ -195,7 +196,7 @@ private extension SearchResultCell {
     func setupAppearance() {
         downloadMenuStackView.isHidden = true
         downloadControlStackView.isHidden = true
-       
+        
         setConstraints()
     }
     
@@ -214,7 +215,7 @@ private extension SearchResultCell {
             
             downloadedMark.topAnchor.constraint(equalTo:safeAreaLayoutGuide.topAnchor, constant: 8),
             downloadedMark.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
-
+            
             
             
             downloadMenuStackView.bottomAnchor.constraint(equalTo:safeAreaLayoutGuide.bottomAnchor),

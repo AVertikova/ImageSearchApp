@@ -10,6 +10,7 @@ import Foundation
 protocol IImagesGalleryInteractor {
     var uiUpdater: IImagesGalleryViewUpdateDelegate? { get set }
     func fetchImages(completion: @escaping ([[GalleryImageViewModel]]?, Error?) -> Void)
+    func removeImages(_ images: [GalleryImageViewModel])
 }
 
 final class ImagesGalleryInteractor {
@@ -24,6 +25,7 @@ final class ImagesGalleryInteractor {
 }
 
 extension ImagesGalleryInteractor: IImagesGalleryInteractor {
+    
     func fetchImages(completion: @escaping ([[GalleryImageViewModel]]?, Error?) -> Void) {
         dataService.fetchImages() { [weak self] result, error in
             guard let result = result, error == nil else {
@@ -31,8 +33,13 @@ extension ImagesGalleryInteractor: IImagesGalleryInteractor {
                 return
             }
             self?.fetchResult = result
-            print("GALLER INTERACTOR ", self?.fetchResult.count)
             completion(self?.fetchResult, nil)
+        }
+    }
+    
+    func removeImages(_ images: [GalleryImageViewModel]) {
+        images.forEach { image in
+            dataService.removeImage(image)
         }
     }
 }

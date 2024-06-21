@@ -8,6 +8,7 @@
 import Foundation
 
 protocol IImageSearchPresenter {
+    func viewWillAppear()
     func didLoad(ui: IImageSearchView)
     func performNewSearch(with searchQuery: String, at pageNumber: Int)
     func updateSearchResult(at pageNumber: Int)
@@ -59,6 +60,10 @@ final class ImageSearchPresenter: NSObject {
 }
 
 extension ImageSearchPresenter: IImageSearchPresenter {
+    func viewWillAppear() {
+        self.searchResult = []
+    }
+    
     
     func didLoad(ui: IImageSearchView) {
         interactor.uiUpdater = self
@@ -83,7 +88,6 @@ extension ImageSearchPresenter: IImageSearchPresenter {
         let downloaded = imageObject.downloaded
         let downloadItem = interactor.getDownloadItem(for: imageObject)
         guard let image = imageObject.image else { return }
-//        print("PRESENTER WILL CONFIGURE ", index)
         cell.configure(with: image, downloaded: downloaded, downloadItem: downloadItem)
     }
     
@@ -180,7 +184,7 @@ private extension ImageSearchPresenter {
 extension ImageSearchPresenter: IImageSearchResultDelegate {
     
     func imageSelected(at index: Int) {
-
+        
         if searchResult[index].downloaded == false {
             ui?.showDownloadMenu(at: index)
         } else {

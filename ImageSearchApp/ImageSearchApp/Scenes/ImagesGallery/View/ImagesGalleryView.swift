@@ -8,6 +8,27 @@
 import UIKit
 
 class ImagesGalleryView: UIView {
+    var buttonEventDelegate: IImagesGalleryButtonsHandler?
+    
+    private var selectionModeOn = false {
+        didSet {
+            selectImagesButton.title = selectionModeOn ?
+            "Cancel": "Select"
+        }
+    }
+    
+    lazy var selectImagesButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "Select",
+                                     style: .plain, target: self, action: #selector(selectButtonTapped))
+        return button
+    }()
+    
+    lazy var removeImagesButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "trash"),
+                                     style: .plain, target: self, action: #selector(removeButtonTapped))
+        button.tintColor = .white
+        return button
+    }()
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
@@ -42,10 +63,8 @@ extension ImagesGalleryView {
         collectionView.dataSource = dataSource
     }
     
-    func updateItem(at index: Int) {
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
-        }
+    func selectButtonIsActivated(_ active: Bool) {
+        removeImagesButton.tintColor = active ?  .systemRed : .white
     }
 }
 
@@ -104,5 +123,14 @@ private extension ImagesGalleryView {
             collectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
+    }
+    
+    @objc func selectButtonTapped() {
+        selectionModeOn.toggle()
+        buttonEventDelegate?.selectImagesButtonTapped()
+    }
+    
+    @objc func removeButtonTapped() {
+        buttonEventDelegate?.removeImagesButtonTapped()
     }
 }

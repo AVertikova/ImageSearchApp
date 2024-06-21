@@ -61,6 +61,11 @@ class ImageSearchViewController: UIViewController {
         fatalError(CommonError.requiredInitError)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        searchBar.text = ""
+        presenter.viewWillAppear()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.didLoad(ui: self)

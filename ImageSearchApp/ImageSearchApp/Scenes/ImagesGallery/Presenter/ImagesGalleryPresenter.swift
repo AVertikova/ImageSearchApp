@@ -9,7 +9,8 @@ import Foundation
 
 protocol IImagesGalleryPresenter {
     func didLoad(ui: IImagesGalleryView)
-    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int)
+    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int, selectionMode: Bool)
+    func removeButtonTapped()
 }
 
 protocol IImagesGalleryDataSource {
@@ -21,7 +22,7 @@ protocol IImagesGalleryDataSource {
 }
 
 protocol IImagesGalleryDelegate {
-    func imageSelected(at section: Int, index: Int)
+    func imageSelected(at section: Int, index: Int, selectionModeIsOn: Bool)
 }
 
 protocol IImagesGalleryViewUpdateDelegate: AnyObject  {
@@ -33,11 +34,10 @@ final class ImagesGalleryPresenter {
     private var interactor: IImagesGalleryInteractor
     private var router: ImagesGalleryRouter
     
-    private var fetchResult: [[GalleryImageViewModel]] = [[]] {
-        didSet {
-            ui?.update()
-        }
-    }
+    private var fetchResult: [[GalleryImageViewModel]] = [[]]
+    
+    private var selectedImages: [GalleryImageViewModel] = []
+    private var selectedIndecies: [IndexPath] = []
     
     init(interactor: IImagesGalleryInteractor, router: ImagesGalleryRouter) {
         self.interactor = interactor
@@ -49,20 +49,33 @@ final class ImagesGalleryPresenter {
 extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     
     func didLoad(ui: any IImagesGalleryView) {
-        print("presenter did load")
         self.ui = ui
         interactor.uiUpdater = self
         fetchImages()
+        self.ui?.update()
+        
     }
     
-    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int) {
+    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int, selectionMode: Bool) {
         let image = fetchResult[section][index].image
-        cell.configure(with: image)
+        cell.configure(with: image, selectionModeIsOn: selectionMode)
+    }
+    
+    func removeButtonTapped() {
+        if selectedImages.isEmpty == false {
+            
+            interactor.removeImages(selectedImages)
+            selectedImages = []
+            fetchImages()
+            ui?.removeItemsAt(selectedIndecies)
+            selectedIndecies = []
+            ui?.update()
+        }
     }
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryDataSource {
-
+    
     func getNumberOfSections() -> Int {
         return fetchResult.count
     }
@@ -87,27 +100,33 @@ extension ImagesGalleryPresenter: IImagesGalleryDataSource {
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryDelegate {
-    func imageSelected(at section: Int, index: Int) {
-        guard let sourceVC = self.ui as? ImagesGalleryViewController else {
-            fatalError(CommonError.failedToShowModalWindow)
-        }
+    
+    func imageSelected(at section: Int, index: Int, selectionModeIsOn: Bool) {
         
-        router.showImageModally(with: fetchResult[section][index].image, at: sourceVC)
+        if selectionModeIsOn {
+            selectedImages.append(fetchResult[section][index])
+            selectedIndecies.append(IndexPath(item: index, section: section))
+            ui?.setCellSelected(at: IndexPath(item: index, section: section))
+        } else {
+            selectedImages = []
+            guard let sourceVC = self.ui as? ImagesGalleryViewController else {
+                fatalError(CommonError.failedToShowModalWindow)
+            }
+            router.showImageModally(with: fetchResult[section][index].image, at: sourceVC)
+        }
     }
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryViewUpdateDelegate {
     
 }
- 
+
 private extension ImagesGalleryPresenter {
     
     func fetchImages() {
-        print("presenter fetchImages()")
         interactor.fetchImages() { [weak self] result, error in
             
             guard let fetchResult = result, error == nil else {
-                print("presenter fetchImages() 2 ", self?.fetchResult.count)
                 if let error = error as? NetworkError {
                     Notifier.imageSearchErrorOccured(message: "Error: \(error.description)")
                 } else {
@@ -116,7 +135,6 @@ private extension ImagesGalleryPresenter {
                 return
             }
             self?.fetchResult = fetchResult
-            print("presenter fetchImages() ", self?.fetchResult.count)
         }
     }
 }

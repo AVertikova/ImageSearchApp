@@ -13,7 +13,7 @@ final class ImageSearchView: UIView {
     lazy var showGalleryButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage(systemName: "photo.on.rectangle.angled"),
                                      style: .plain, target: self, action: #selector(galleryButtonTapped))
-        button.tintColor = .label
+        
         return button
     }()
     

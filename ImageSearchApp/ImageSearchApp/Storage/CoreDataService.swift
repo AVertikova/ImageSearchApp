@@ -15,6 +15,7 @@ protocol IImageSearchDataService {
 
 protocol IImagesGalleryDataService {
     func fetchImages(completion: ([[GalleryImageViewModel]]?, Error?) -> Void)
+    func removeImage(_ image: GalleryImageViewModel)
 }
 
 final class CoreDataService {
@@ -54,7 +55,7 @@ extension CoreDataService: IImagesGalleryDataService {
         
         do {
             let fetchResult = try context.fetch(fetchRequest)
-            let images = fetchResult.map { GalleryImageViewModel(id: $0.id, 
+            let images = fetchResult.map { GalleryImageViewModel(id: $0.id,
                                                                  image: UIImage(data: $0.imageData) ?? UIImage(),
                                                                  cathegory: $0.cathegory) }
             completion(sortImagesByCathegory(images), nil)
@@ -63,31 +64,21 @@ extension CoreDataService: IImagesGalleryDataService {
         }
     }
     
-//    func removeImage(_ image: GalleryImageViewModel, completion: ([[GalleryImageViewModel]]?, Error?) -> Void) {
-//        let context = persistentContainer.viewContext
-//        let fetchRequest = ImageEntity.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "id == %@" , image.id as CVarArg)
-//        
-//        do {
-//            let items = try context.fetch(fetchRequest)
-//            for item in items {
-//                context.delete(item)
-//            }
-//            saveContext(context)
-//        } catch let error as NSError {
-//            fatalError("Could not delete item. \(error), \(error.userInfo)")
-//        }
-//        
-//        do {
-//            let fetchResult = try context.fetch(fetchRequest)
-//            let images = fetchResult.map { GalleryImageViewModel(id: $0.id,
-//                                                                 image: UIImage(data: $0.imageData) ?? UIImage(),
-//                                                                 cathegory: $0.cathegory) }
-//            completion(sortImagesByCathegory(images), nil)
-//        } catch {
-//            completion(nil, error)
-//        }
-//    }
+    func removeImage(_ image: GalleryImageViewModel) {
+        let context = persistentContainer.viewContext
+        let fetchRequest = ImageEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@" , image.id as CVarArg)
+        
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            saveContext(context)
+        } catch let error as NSError {
+            fatalError("Could not delete item. \(error), \(error.userInfo)")
+        }
+    }
 }
 
 private extension CoreDataService {
@@ -104,7 +95,7 @@ private extension CoreDataService {
     }
     
     func sortImagesByCathegory(_ images: [GalleryImageViewModel]) -> [[GalleryImageViewModel]] {
-       
+        
         let cathegories = [String](Set(images.map { $0.cathegory }))
         
         let model = cathegories.map { cathegory in
@@ -112,6 +103,6 @@ private extension CoreDataService {
             
         }
         
-       return model
+        return model
     }
 }
