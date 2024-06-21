@@ -179,7 +179,7 @@ private extension ImageSearchInteractor {
             networkService.getPreviewImage(with: result.urls.small) { image, error in
                 if let image = image, error == nil {
                     guard let previewURL = URL(string: result.urls.small),
-                          let downloadURL = URL(string: result.urls.small) else { return }
+                          let downloadURL = URL(string: result.links.download) else { return }
                     
                     let image = SearchResultImageDTO(id: result.id, previewURL: previewURL, downloadURL: downloadURL, cathegory: self.query, image: image)
                     completion (image, nil)

@@ -14,8 +14,8 @@ protocol IImagesGalleryView: AnyObject {
 
 class ImagesGalleryViewController: UIViewController {
     private let presenter: IImagesGalleryPresenter
-    private let imagesGalleryDataSource: IImagesGalleryDataSource
-    private let imagesGalleryDelegate: IImagesGalleryDelegate
+    private let galleryDataSource: IImagesGalleryDataSource
+    private let galleryDelegate: IImagesGalleryDelegate
     
     private lazy var contentView: ImagesGalleryView = {
         let view = ImagesGalleryView()
@@ -25,10 +25,10 @@ class ImagesGalleryViewController: UIViewController {
         return view
     }()
     
-    init(presenter: IImagesGalleryPresenter, imagesGalleryDataSource: IImagesGalleryDataSource, imagesGalleryDelegate: IImagesGalleryDelegate) {
+    init(presenter: IImagesGalleryPresenter, galleryDataSource: IImagesGalleryDataSource, galleryDelegate: IImagesGalleryDelegate) {
         self.presenter = presenter
-        self.imagesGalleryDataSource = imagesGalleryDataSource
-        self.imagesGalleryDelegate = imagesGalleryDelegate
+        self.galleryDataSource = galleryDataSource
+        self.galleryDelegate = galleryDelegate
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -38,9 +38,10 @@ class ImagesGalleryViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError(CommonError.requiredInitError)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("did load")
         presenter.didLoad(ui: self)
         setupAppearance()
     }
@@ -75,20 +76,52 @@ extension ImagesGalleryViewController: INotifierDelegate {
 
 extension ImagesGalleryViewController: UICollectionViewDataSource {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return galleryDataSource.getNumberOfSections()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imagesGalleryDataSource.getNumberOfRows()
+        return galleryDataSource.getNumberOfItemsInSection(section)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagesGalleryCell.identifier, for: indexPath) as? ImagesGalleryCell {
-            
-            presenter.configureCell(cell, at: indexPath.row)
+        
+            presenter.configureCell(cell, at: indexPath.section, index: indexPath.item)
             cell.isUserInteractionEnabled = true
             
             return cell
         } else {
             return UICollectionViewCell()
         }
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+                case UICollectionView.elementKindSectionHeader:
+            let headerView = contentView.collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.identifier, for: indexPath) as! SectionHeader
+            
+            headerView.headerLabel.text = galleryDataSource.getHeader(for: indexPath.section)
+                    return headerView
+                default:
+                    assert(false, "Unexpected element kind")
+                }
+            }
+        func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        
+            let layoutAttributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: indexPath)
+        
+            if elementKind == UICollectionView.elementKindSectionHeader {
+                layoutAttributes.frame = CGRect(x: 0.0, y: 0.0, width: 64, height: 44)
+            }
+            return layoutAttributes
+        }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 24)
     }
 }
 
@@ -99,7 +132,7 @@ extension ImagesGalleryViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        imagesGalleryDelegate.imageSelected(at: indexPath.item)
+        galleryDelegate.imageSelected(at: indexPath.section, index: indexPath.item)
     }
 }
 

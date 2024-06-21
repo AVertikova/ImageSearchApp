@@ -14,9 +14,16 @@ struct APIResponse: Codable {
 struct ResposeResult: Codable {
     let id: String
     let urls: URLS
+    let links: Links
 }
 
 struct URLS: Codable {
-    let full: String
     let small: String
 }
+
+struct Links: Codable {
+    let download: String
+}
+
+
+

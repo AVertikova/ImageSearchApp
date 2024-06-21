@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB4F09CF2C24AD0200A14BAB /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4F09CE2C24AD0200A14BAB /* SectionHeader.swift */; };
 		EB5FC92A2C22A66F006DA6E7 /* ImagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC9292C22A66F006DA6E7 /* ImagePreviewView.swift */; };
 		EB5FC92C2C22A680006DA6E7 /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC92B2C22A680006DA6E7 /* ImagePreviewViewController.swift */; };
 		EB5FC92E2C22A68D006DA6E7 /* ImagePreviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC92D2C22A68D006DA6E7 /* ImagePreviewModel.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EB4F09CE2C24AD0200A14BAB /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		EB5FC9292C22A66F006DA6E7 /* ImagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewView.swift; sourceTree = "<group>"; };
 		EB5FC92B2C22A680006DA6E7 /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		EB5FC92D2C22A68D006DA6E7 /* ImagePreviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewModel.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				EB927DDD2C240757000C882B /* ImagesGalleryViewController.swift */,
 				EB927DDF2C24076F000C882B /* ImagesGalleryView.swift */,
 				EB927DE52C24083D000C882B /* ImagesGalleryCell.swift */,
+				EB4F09CE2C24AD0200A14BAB /* SectionHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				EB927DDE2C240757000C882B /* ImagesGalleryViewController.swift in Sources */,
 				EB927DE22C240781000C882B /* ImagesGalleryInteractor.swift in Sources */,
 				EBA5342F2C21479000C4093A /* ImageSearchRouter.swift in Sources */,
+				EB4F09CF2C24AD0200A14BAB /* SectionHeader.swift in Sources */,
 				EBA534362C21481700C4093A /* NetworkService.swift in Sources */,
 				EBA5343C2C21487A00C4093A /* Notifier.swift in Sources */,
 				EBA534422C214B5400C4093A /* ImageSearchAssembly.swift in Sources */,

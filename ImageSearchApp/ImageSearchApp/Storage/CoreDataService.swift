@@ -13,8 +13,8 @@ protocol IImageSearchDataService {
     func save(image: SearchResultImageDTO)
 }
 
-protocol IDownloadedImagesDataService {
-    func fetchImages(completion: ([GalleryImageViewModel]?, Error?) -> Void)
+protocol IImagesGalleryDataService {
+    func fetchImages(completion: ([[GalleryImageViewModel]]?, Error?) -> Void)
 }
 
 final class CoreDataService {
@@ -46,17 +46,18 @@ extension CoreDataService: IImageSearchDataService {
     }
 }
 
-extension CoreDataService: IDownloadedImagesDataService {
+extension CoreDataService: IImagesGalleryDataService {
     
-    func fetchImages(completion: ([GalleryImageViewModel]?, Error?) -> Void) {
+    func fetchImages(completion: ([[GalleryImageViewModel]]?, Error?) -> Void) {
         let context = persistentContainer.viewContext
         let fetchRequest = ImageEntity.fetchRequest()
         
         do {
-            let images = try context.fetch(fetchRequest)
-            completion(images.map {
-                GalleryImageViewModel(id: $0.id, image: UIImage(data: $0.imageData) ?? UIImage(), cathegory: $0.cathegory)
-            }, nil)
+            let fetchResult = try context.fetch(fetchRequest)
+            let images = fetchResult.map { GalleryImageViewModel(id: $0.id, 
+                                                                 image: UIImage(data: $0.imageData) ?? UIImage(),
+                                                                 cathegory: $0.cathegory) }
+            completion(sortImagesByCathegory(images), nil)
         } catch {
             completion(nil, error)
         }
@@ -74,5 +75,17 @@ private extension CoreDataService {
                 fatalError("Unresolved error occured while saving context.  \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    func sortImagesByCathegory(_ images: [GalleryImageViewModel]) -> [[GalleryImageViewModel]] {
+       
+        let cathegories = [String](Set(images.map { $0.cathegory }))
+        
+        let model = cathegories.map { cathegory in
+            return images.filter { $0.cathegory == cathegory }
+            
+        }
+        
+       return model
     }
 }

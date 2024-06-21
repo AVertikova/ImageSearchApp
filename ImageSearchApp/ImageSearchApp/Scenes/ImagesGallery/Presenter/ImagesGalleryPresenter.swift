@@ -9,16 +9,19 @@ import Foundation
 
 protocol IImagesGalleryPresenter {
     func didLoad(ui: IImagesGalleryView)
-    func configureCell(_ cell: ImagesGalleryCell, at index: Int)
+    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int)
 }
 
 protocol IImagesGalleryDataSource {
-    func getNumberOfRows() -> Int
-    func getCellForRow(at index: Int) -> GalleryImageViewModel
+    
+    func getNumberOfSections() -> Int
+    func getNumberOfItemsInSection(_ section: Int) -> Int
+    func getCellForRow(at section: Int, index: Int) -> GalleryImageViewModel
+    func getHeader(for section: Int) -> String
 }
 
 protocol IImagesGalleryDelegate {
-    func imageSelected(at index: Int)
+    func imageSelected(at section: Int, index: Int)
 }
 
 protocol IImagesGalleryViewUpdateDelegate: AnyObject  {
@@ -30,7 +33,7 @@ final class ImagesGalleryPresenter {
     private var interactor: IImagesGalleryInteractor
     private var router: ImagesGalleryRouter
     
-    private var fetchResult: [GalleryImageViewModel] = [] {
+    private var fetchResult: [[GalleryImageViewModel]] = [[]] {
         didSet {
             ui?.update()
         }
@@ -46,34 +49,50 @@ final class ImagesGalleryPresenter {
 extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     
     func didLoad(ui: any IImagesGalleryView) {
+        print("presenter did load")
         self.ui = ui
         interactor.uiUpdater = self
         fetchImages()
     }
     
-    func configureCell(_ cell: ImagesGalleryCell, at index: Int) {
-        let image = fetchResult[index].image
+    func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int) {
+        let image = fetchResult[section][index].image
         cell.configure(with: image)
     }
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryDataSource {
-    func getNumberOfRows() -> Int {
+
+    func getNumberOfSections() -> Int {
         return fetchResult.count
     }
     
-    func getCellForRow(at index: Int) -> GalleryImageViewModel {
-        return fetchResult[index]
+    func getNumberOfItemsInSection(_ section: Int) -> Int {
+        return fetchResult[section].count
+    }
+    
+    
+    
+    func getCellForRow(at section: Int, index: Int) -> GalleryImageViewModel {
+        return fetchResult[section][index]
+    }
+    
+    func getHeader(for section: Int) -> String {
+        
+        guard let item = fetchResult[section].first else {
+            return "Empty Header"
+        }
+        return item.cathegory
     }
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryDelegate {
-    func imageSelected(at index: Int) {
+    func imageSelected(at section: Int, index: Int) {
         guard let sourceVC = self.ui as? ImagesGalleryViewController else {
             fatalError(CommonError.failedToShowModalWindow)
         }
         
-        router.showImageModally(with: fetchResult[index].image, at: sourceVC)
+        router.showImageModally(with: fetchResult[section][index].image, at: sourceVC)
     }
 }
 
@@ -84,9 +103,11 @@ extension ImagesGalleryPresenter: IImagesGalleryViewUpdateDelegate {
 private extension ImagesGalleryPresenter {
     
     func fetchImages() {
+        print("presenter fetchImages()")
         interactor.fetchImages() { [weak self] result, error in
             
             guard let fetchResult = result, error == nil else {
+                print("presenter fetchImages() 2 ", self?.fetchResult.count)
                 if let error = error as? NetworkError {
                     Notifier.imageSearchErrorOccured(message: "Error: \(error.description)")
                 } else {
@@ -95,6 +116,7 @@ private extension ImagesGalleryPresenter {
                 return
             }
             self?.fetchResult = fetchResult
+            print("presenter fetchImages() ", self?.fetchResult.count)
         }
     }
 }

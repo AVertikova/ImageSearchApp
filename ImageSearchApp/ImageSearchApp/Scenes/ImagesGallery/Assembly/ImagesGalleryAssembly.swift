@@ -11,7 +11,7 @@ enum ImagesGalleryAssembly {
     
     struct Dependencies {
         let navigationController: UINavigationController
-        let dataService: IImageSearchDataService
+        let dataService: IImagesGalleryDataService
     }
     
     static func createModule(with dependecies: Dependencies) -> ImagesGalleryViewController {
@@ -19,7 +19,7 @@ enum ImagesGalleryAssembly {
         let interactor = ImagesGalleryInteractor(dataService: dependecies.dataService)
         let router = ImagesGalleryRouter(navigationController: dependecies.navigationController)
         let presenter = ImagesGalleryPresenter(interactor: interactor, router: router)
-        let viewController = ImagesGalleryViewController(presenter: presenter, imagesGalleryDataSource: presenter, imagesGalleryDelegate: presenter)
+        let viewController = ImagesGalleryViewController(presenter: presenter, galleryDataSource: presenter, galleryDelegate: presenter)
         
         return viewController
     }

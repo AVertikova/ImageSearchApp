@@ -10,7 +10,7 @@ import UIKit
 class ImagesGalleryCell: UICollectionViewCell {
     static let identifier = "ImagesGalleryCell"
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
