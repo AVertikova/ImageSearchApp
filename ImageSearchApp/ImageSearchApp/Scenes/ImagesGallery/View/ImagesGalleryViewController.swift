@@ -18,7 +18,6 @@ protocol IImagesGalleryButtonsHandler {
     func removeImagesButtonTapped()
 }
 
-
 class ImagesGalleryViewController: UIViewController {
     private let presenter: IImagesGalleryPresenter
     private let galleryDataSource: IImagesGalleryDataSource
@@ -46,7 +45,6 @@ class ImagesGalleryViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
     }
-    
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -154,10 +152,6 @@ extension ImagesGalleryViewController: UICollectionViewDataSource {
 }
 
 extension ImagesGalleryViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        true
-    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedItems.append(indexPath)

@@ -25,10 +25,6 @@ protocol IImagesGalleryDelegate {
     func imageSelected(at section: Int, index: Int, selectionModeIsOn: Bool)
 }
 
-protocol IImagesGalleryViewUpdateDelegate: AnyObject  {
-    
-}
-
 final class ImagesGalleryPresenter {
     weak var ui: IImagesGalleryView?
     private var interactor: IImagesGalleryInteractor
@@ -50,10 +46,8 @@ extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     
     func didLoad(ui: any IImagesGalleryView) {
         self.ui = ui
-        interactor.uiUpdater = self
         fetchImages()
         self.ui?.update()
-        
     }
     
     func configureCell(_ cell: ImagesGalleryCell, at section: Int, index: Int, selectionMode: Bool) {
@@ -63,13 +57,14 @@ extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     
     func removeButtonTapped() {
         if selectedImages.isEmpty == false {
-            
             interactor.removeImages(selectedImages)
-            selectedImages = []
             fetchImages()
-            ui?.removeItemsAt(selectedIndecies)
-            selectedIndecies = []
             ui?.update()
+            
+            ui?.removeItemsAt(selectedIndecies)
+            ui?.update()
+            selectedImages = []
+            selectedIndecies = []
         }
     }
 }
@@ -115,10 +110,6 @@ extension ImagesGalleryPresenter: IImagesGalleryDelegate {
             router.showImageModally(with: fetchResult[section][index].image, at: sourceVC)
         }
     }
-}
-
-extension ImagesGalleryPresenter: IImagesGalleryViewUpdateDelegate {
-    
 }
 
 private extension ImagesGalleryPresenter {

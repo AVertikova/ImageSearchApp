@@ -57,9 +57,11 @@ class ImagesGalleryCell: UICollectionViewCell {
     }
     
     func setSelected() {
-        var config = UIImage.SymbolConfiguration(paletteColors: [.systemBlue, .systemBlue])
-        config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
-        selectionModeUnchecked.preferredSymbolConfiguration = config
+        if isSelected {
+            var config = UIImage.SymbolConfiguration(paletteColors: [.systemBlue, .systemBlue])
+            config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
+            selectionModeUnchecked.preferredSymbolConfiguration = config
+        }
     }
 }
 
