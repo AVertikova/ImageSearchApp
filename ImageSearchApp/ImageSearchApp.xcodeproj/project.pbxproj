@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		EB4F09CF2C24AD0200A14BAB /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4F09CE2C24AD0200A14BAB /* SectionHeader.swift */; };
+		EB4F09D22C257E6400A14BAB /* ImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4F09D02C257E6400A14BAB /* ImageEntity+CoreDataClass.swift */; };
+		EB4F09D32C257E6400A14BAB /* ImageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4F09D12C257E6400A14BAB /* ImageEntity+CoreDataProperties.swift */; };
 		EB5FC92A2C22A66F006DA6E7 /* ImagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC9292C22A66F006DA6E7 /* ImagePreviewView.swift */; };
 		EB5FC92C2C22A680006DA6E7 /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC92B2C22A680006DA6E7 /* ImagePreviewViewController.swift */; };
 		EB5FC92E2C22A68D006DA6E7 /* ImagePreviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC92D2C22A68D006DA6E7 /* ImagePreviewModel.swift */; };
 		EB5FC9302C22A69A006DA6E7 /* ImagePreviewAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FC92F2C22A69A006DA6E7 /* ImagePreviewAssembly.swift */; };
 		EB927DC32C23371E000C882B /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DC22C23371E000C882B /* CoreDataService.swift */; };
-		EB927DD22C23556C000C882B /* ImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DD02C23556C000C882B /* ImageEntity+CoreDataClass.swift */; };
-		EB927DD32C23556C000C882B /* ImageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DD12C23556C000C882B /* ImageEntity+CoreDataProperties.swift */; };
 		EB927DD52C235970000C882B /* GalleryImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DD42C235970000C882B /* GalleryImageViewModel.swift */; };
 		EB927DDC2C240699000C882B /* ImagesGalleryAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DDB2C240699000C882B /* ImagesGalleryAssembly.swift */; };
 		EB927DDE2C240757000C882B /* ImagesGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB927DDD2C240757000C882B /* ImagesGalleryViewController.swift */; };
@@ -47,13 +47,13 @@
 
 /* Begin PBXFileReference section */
 		EB4F09CE2C24AD0200A14BAB /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		EB4F09D02C257E6400A14BAB /* ImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EB4F09D12C257E6400A14BAB /* ImageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EB5FC9292C22A66F006DA6E7 /* ImagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewView.swift; sourceTree = "<group>"; };
 		EB5FC92B2C22A680006DA6E7 /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		EB5FC92D2C22A68D006DA6E7 /* ImagePreviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewModel.swift; sourceTree = "<group>"; };
 		EB5FC92F2C22A69A006DA6E7 /* ImagePreviewAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewAssembly.swift; sourceTree = "<group>"; };
 		EB927DC22C23371E000C882B /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
-		EB927DD02C23556C000C882B /* ImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		EB927DD12C23556C000C882B /* ImageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EB927DD42C235970000C882B /* GalleryImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryImageViewModel.swift; sourceTree = "<group>"; };
 		EB927DDB2C240699000C882B /* ImagesGalleryAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryAssembly.swift; sourceTree = "<group>"; };
 		EB927DDD2C240757000C882B /* ImagesGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGalleryViewController.swift; sourceTree = "<group>"; };
@@ -235,8 +235,8 @@
 		EBA534112C2143C900C4093A /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				EB927DD02C23556C000C882B /* ImageEntity+CoreDataClass.swift */,
-				EB927DD12C23556C000C882B /* ImageEntity+CoreDataProperties.swift */,
+				EB4F09D02C257E6400A14BAB /* ImageEntity+CoreDataClass.swift */,
+				EB4F09D12C257E6400A14BAB /* ImageEntity+CoreDataProperties.swift */,
 				EBA534002C2142AE00C4093A /* ImageSearchApp.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -420,6 +420,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB927DDC2C240699000C882B /* ImagesGalleryAssembly.swift in Sources */,
+				EB4F09D22C257E6400A14BAB /* ImageEntity+CoreDataClass.swift in Sources */,
+				EB4F09D32C257E6400A14BAB /* ImageEntity+CoreDataProperties.swift in Sources */,
 				EBA534272C2146C500C4093A /* SearchResultCell.swift in Sources */,
 				EB5FC92A2C22A66F006DA6E7 /* ImagePreviewView.swift in Sources */,
 				EBA5343A2C21485000C4093A /* NetworkError.swift in Sources */,
@@ -445,8 +447,6 @@
 				EB5FC92E2C22A68D006DA6E7 /* ImagePreviewModel.swift in Sources */,
 				EB927DE02C24076F000C882B /* ImagesGalleryView.swift in Sources */,
 				EB5FC92C2C22A680006DA6E7 /* ImagePreviewViewController.swift in Sources */,
-				EB927DD22C23556C000C882B /* ImageEntity+CoreDataClass.swift in Sources */,
-				EB927DD32C23556C000C882B /* ImageEntity+CoreDataProperties.swift in Sources */,
 				EB927DE62C24083D000C882B /* ImagesGalleryCell.swift in Sources */,
 				EBA534342C2147F500C4093A /* DownloadService.swift in Sources */,
 				EBA533FA2C2142AE00C4093A /* SceneDelegate.swift in Sources */,

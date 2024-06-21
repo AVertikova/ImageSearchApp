@@ -8,7 +8,7 @@
 import UIKit
 
 struct GalleryImageViewModel {
-    let id: UUID
+    let id: String
     let image: UIImage
     let cathegory: String
 }

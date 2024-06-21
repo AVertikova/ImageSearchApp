@@ -24,6 +24,17 @@ final class SearchResultCell: UICollectionViewCell {
         return imageView
     }()
     
+    private lazy var downloadedMark: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "photo.badge.checkmark"), for: .normal)
+        button.tintColor = .black
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = button.frame.size.width/2
+        button.clipsToBounds = true
+        
+        return button
+    }()
+    
     private lazy var downloadButton: UIButton = {
         let button = createButton()
         button.addTarget(self, action: #selector(downloadButtonTapped),
@@ -132,6 +143,7 @@ final class SearchResultCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError(CommonError.requiredInitError)
     }
+    
 }
 
 extension SearchResultCell {
@@ -154,6 +166,7 @@ extension SearchResultCell {
             }
         }
         
+        downloadedMark.isHidden = !downloaded
         downloadControlStackView.isHidden = !showDownloadControl
         downloadMenuStackView.isHidden = downloaded || !isSelected
     }
@@ -182,6 +195,7 @@ private extension SearchResultCell {
     func setupAppearance() {
         downloadMenuStackView.isHidden = true
         downloadControlStackView.isHidden = true
+       
         setConstraints()
     }
     
@@ -189,6 +203,7 @@ private extension SearchResultCell {
         contentView.addSubview(resultImageView)
         contentView.addSubview(downloadMenuStackView)
         contentView.addSubview(downloadControlStackView)
+        contentView.addSubview(downloadedMark)
         
         NSLayoutConstraint.activate([
             
@@ -196,6 +211,11 @@ private extension SearchResultCell {
             resultImageView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor),
             resultImageView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
             resultImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            
+            downloadedMark.topAnchor.constraint(equalTo:safeAreaLayoutGuide.topAnchor, constant: 8),
+            downloadedMark.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
+
+            
             
             downloadMenuStackView.bottomAnchor.constraint(equalTo:safeAreaLayoutGuide.bottomAnchor),
             downloadMenuStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),

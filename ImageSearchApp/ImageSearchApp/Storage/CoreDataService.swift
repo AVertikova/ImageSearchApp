@@ -36,7 +36,7 @@ extension CoreDataService: IImageSearchDataService {
     func save(image: SearchResultImageDTO) {
         persistentContainer.performBackgroundTask { context in
             let entity = ImageEntity(context: context)
-            entity.id = UUID()
+            entity.id = image.id
             entity.cathegory = image.cathegory
             if let imageData = image.image?.pngData() {
                 entity.imageData = imageData
@@ -62,6 +62,32 @@ extension CoreDataService: IImagesGalleryDataService {
             completion(nil, error)
         }
     }
+    
+//    func removeImage(_ image: GalleryImageViewModel, completion: ([[GalleryImageViewModel]]?, Error?) -> Void) {
+//        let context = persistentContainer.viewContext
+//        let fetchRequest = ImageEntity.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "id == %@" , image.id as CVarArg)
+//        
+//        do {
+//            let items = try context.fetch(fetchRequest)
+//            for item in items {
+//                context.delete(item)
+//            }
+//            saveContext(context)
+//        } catch let error as NSError {
+//            fatalError("Could not delete item. \(error), \(error.userInfo)")
+//        }
+//        
+//        do {
+//            let fetchResult = try context.fetch(fetchRequest)
+//            let images = fetchResult.map { GalleryImageViewModel(id: $0.id,
+//                                                                 image: UIImage(data: $0.imageData) ?? UIImage(),
+//                                                                 cathegory: $0.cathegory) }
+//            completion(sortImagesByCathegory(images), nil)
+//        } catch {
+//            completion(nil, error)
+//        }
+//    }
 }
 
 private extension CoreDataService {

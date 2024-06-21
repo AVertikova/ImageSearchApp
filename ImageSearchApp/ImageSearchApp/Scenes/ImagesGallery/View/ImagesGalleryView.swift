@@ -54,7 +54,6 @@ private extension ImagesGalleryView {
     private func createCompositionalLayout() -> UICollectionViewLayout {
         let itemSpacing = CGFloat(2)
         let sectionSpacing = CGFloat(20)
-        let headerSpacing = CGFloat(16)
         
         let layout = UICollectionViewCompositionalLayout { (section: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             

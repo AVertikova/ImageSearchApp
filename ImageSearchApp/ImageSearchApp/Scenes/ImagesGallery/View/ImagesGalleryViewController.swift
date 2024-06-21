@@ -138,6 +138,7 @@ extension ImagesGalleryViewController: UICollectionViewDelegate {
 
 private extension ImagesGalleryViewController {
     func setupAppearance() {
+        navigationItem.leftBarButtonItem?.tintColor = .label
         navigationItem.title = "Dowloaded images"
     }
 }
