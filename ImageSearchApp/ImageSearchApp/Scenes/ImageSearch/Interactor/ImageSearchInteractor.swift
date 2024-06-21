@@ -8,15 +8,17 @@
 import UIKit
 
 protocol IImageSearchInteractor {
+    var uiUpdater: IImageSearchViewUpdateDelegate? { get set }
     func newSearchStarted()
-    func requestData(with searchQuery: String, completion: @escaping ([ImageViewModel]?, Error?) -> Void)
+    func requestData(with searchQuery: String, pageNumber: Int, completion: @escaping ([SearchResultImageDTO]?, Error?) -> Void)
+    func getDownloadItem(for imageObject: SearchResultImageDTO) -> DownloadItem?
     
-    func startDownload(_ image: ImageViewModel)
-    func pauseDownload(_ image: ImageViewModel)
-    func resumeDownload(_ image: ImageViewModel)
-    func cancelDownload(_ image: ImageViewModel)
+    func startDownload(_ image: SearchResultImageDTO)
+    func pauseDownload(_ image: SearchResultImageDTO)
+    func resumeDownload(_ image: SearchResultImageDTO)
+    func cancelDownload(_ image: SearchResultImageDTO)
     
-    func getDownloadedImage(at index: Int, completion: @escaping (UIImage?, Error?) -> Void)
+    func getDownloadedImage(with id: String, completion: @escaping (UIImage?, Error?) -> Void)
 }
 
 final class ImageSearchInteractor: NSObject {
@@ -24,7 +26,6 @@ final class ImageSearchInteractor: NSObject {
     private let networkService: INetworkService
     private let dataService: IImageSearchDataService
     
-    private var queryResultPageNumber: Int = 1
     private let queryResultTotalPages: Int = 20
     private var query: String = ""
     
@@ -39,7 +40,8 @@ final class ImageSearchInteractor: NSObject {
     }()
     
     private var results: [ResposeResult] = []
-    private var images: [ImageViewModel] = []
+    private var imagesDTO: [SearchResultImageDTO] = []
+    
     
     init(downloadService: DownloadService, networkService: INetworkService, dataService: IImageSearchDataService) {
         self.downloadService = downloadService
@@ -52,14 +54,13 @@ final class ImageSearchInteractor: NSObject {
 extension ImageSearchInteractor: IImageSearchInteractor {
     
     func newSearchStarted() {
-        self.images = []
-        self.queryResultPageNumber = 1
+        self.imagesDTO = []
     }
     
-    func requestData(with searchQuery: String, completion: @escaping ([ImageViewModel]?, Error?) -> Void ) {
-        guard self.queryResultPageNumber <= queryResultTotalPages else { return }
+    func requestData(with searchQuery: String, pageNumber: Int, completion: @escaping ([SearchResultImageDTO]?, Error?) -> Void ) {
+        guard pageNumber <= queryResultTotalPages else { return }
         self.query = searchQuery
-        networkService.getSearchResults(searchQuery: searchQuery, pageNumber: self.queryResultPageNumber) { [weak self] response in
+        networkService.getSearchResults(searchQuery: searchQuery, pageNumber: pageNumber) { [weak self] response in
             
             switch response {
                 
@@ -71,48 +72,49 @@ extension ImageSearchInteractor: IImageSearchInteractor {
                     self?.getPreviewImages { image, error in
                         
                         if let image = image, error == nil {
-                            self?.images.append(image)
+                            self?.imagesDTO.append(image)
                         }
-                        completion (self?.images, nil)
+                        completion (self?.imagesDTO, nil)
                     }
                 } catch {
-                    Notifier.errorOccured(message: "JSON Error: \(String(describing: error))")
+                    Notifier.imageSearchErrorOccured(message: "JSON Error: \(String(describing: error))")
                     return
                 }
             case .failure(let error):
                 completion (nil, error)
             }
-            self?.queryResultPageNumber += 1
+            
         }
     }
     
-    func getDownloadItem(for imageObject: ImageViewModel) -> DownloadItem? {
+    func getDownloadItem(for imageObject: SearchResultImageDTO) -> DownloadItem? {
         return downloadService.activeDownloads[imageObject.downloadURL]
     }
     
-    func startDownload(_ image: ImageViewModel) {
+    func startDownload(_ image: SearchResultImageDTO) {
         downloadService.downloadsSession = downloadsSession
         downloadService.startDownload(image)
     }
     
-    func pauseDownload(_ image: ImageViewModel) {
+    func pauseDownload(_ image: SearchResultImageDTO) {
         downloadService.pauseDownload(image)
     }
     
-    func resumeDownload(_ image: ImageViewModel) {
+    func resumeDownload(_ image: SearchResultImageDTO) {
         downloadService.resumeDownload(image)
     }
     
-    func cancelDownload(_ image: ImageViewModel) {
+    func cancelDownload(_ image: SearchResultImageDTO) {
         downloadService.cancelDownload(image)
     }
     
-    func getDownloadedImage(at index: Int, completion: @escaping (UIImage?, Error?) -> Void) {
-        guard images.isEmpty == false, index < images.count  else {
+    func getDownloadedImage(with id: String, completion: @escaping (UIImage?, Error?) -> Void) {
+        
+        guard imagesDTO.isEmpty == false else {
             completion (nil, NetworkError(code: 0, description: "Image not found"))
             return
         }
-        let image = self.images.first(where: { $0.index == index } )
+        let image = self.imagesDTO.first(where: { $0.id == id } )
         completion(image?.image, nil)
     }
 }
@@ -142,10 +144,14 @@ extension ImageSearchInteractor: URLSessionDownloadDelegate {
         downloadService.activeDownloads[sourceURL] = nil
         
         if let downloadItem = downloadItem {
-            downloadItem.image.downloaded = true
-            dataService.save(image: downloadItem.image)
-            uiUpdater?.updateDownloadedItem(with: downloadItem.image)
-            uiUpdater?.updateRow(at:  downloadItem.image.index)
+            if let index = self.imagesDTO.firstIndex(where: { $0 == downloadItem.imageDTO }) {
+                self.imagesDTO[index].downloaded = true
+            }
+            downloadItem.imageDTO.downloaded = true
+            
+            dataService.save(image: downloadItem.imageDTO)
+            uiUpdater?.updateDownloadedItem(with: downloadItem.imageDTO)
+            uiUpdater?.updateItem(id: downloadItem.imageDTO.id)
         }
     }
     
@@ -162,20 +168,20 @@ extension ImageSearchInteractor: URLSessionDownloadDelegate {
         downloadItem.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
         let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: .file)
         
-        uiUpdater?.updateProgress(at: downloadItem.image.index, progress: downloadItem.progress , totalSize: totalSize)
+        uiUpdater?.updateProgress(itemId: downloadItem.imageDTO.id, progress: downloadItem.progress , totalSize: totalSize)
     }
 }
 
 private extension ImageSearchInteractor {
     
-    func getPreviewImages(completion: @escaping (ImageViewModel?, Error?) -> Void ) {
-        for (index, result) in results.enumerated() {
-            networkService.getPreviewImage(with: result.urls.regular) { image, error in
+    func getPreviewImages(completion: @escaping (SearchResultImageDTO?, Error?) -> Void ) {
+        for result in results {
+            networkService.getPreviewImage(with: result.urls.small) { image, error in
                 if let image = image, error == nil {
-                    guard let previewURL = URL(string: result.urls.regular),
-                          let downloadURL = URL(string: result.urls.regular) else { return }
+                    guard let previewURL = URL(string: result.urls.small),
+                          let downloadURL = URL(string: result.links.download) else { return }
                     
-                    let image = ImageViewModel(index: index, id: result.id, previewURL: previewURL, downloadURL: downloadURL, cathegory: self.query, image: image)
+                    let image = SearchResultImageDTO(id: result.id, previewURL: previewURL, downloadURL: downloadURL, cathegory: self.query, image: image)
                     completion (image, nil)
                 } else {
                     completion (nil, error)

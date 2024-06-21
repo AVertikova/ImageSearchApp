@@ -22,4 +22,13 @@ final class ImageSearchRouter {
         let imageViewerNavigationController = UINavigationController(rootViewController: destinationVC)
         sourceVC.present(imageViewerNavigationController, animated: true)
     }
+    
+    func showGallery() {
+        let dataService = CoreDataService()
+        
+        let dependencies = ImagesGalleryAssembly.Dependencies(navigationController: navigationController, dataService: dataService)
+        
+        let viewController = ImagesGalleryAssembly.createModule(with: dependencies)
+        navigationController.pushViewController(viewController, animated: true)
+    }
 }

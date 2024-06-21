@@ -2,7 +2,7 @@
 //  ImageEntity+CoreDataProperties.swift
 //  ImageSearchApp
 //
-//  Created by Анна Вертикова on 20.06.2024.
+//  Created by Анна Вертикова on 21.06.2024.
 //
 //
 
@@ -16,9 +16,9 @@ extension ImageEntity {
         return NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
     }
 
-    @NSManaged public var imageData: Data
-    @NSManaged public var id: UUID
     @NSManaged public var cathegory: String
+    @NSManaged public var id: String
+    @NSManaged public var imageData: Data
 
 }
 

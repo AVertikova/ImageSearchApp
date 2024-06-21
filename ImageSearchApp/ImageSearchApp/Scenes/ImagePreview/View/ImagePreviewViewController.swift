@@ -32,7 +32,7 @@ class ImagePreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        setupAppearance()
         setDismissButtonTappedEvent()
     }
     
@@ -50,9 +50,8 @@ extension ImagePreviewViewController: IImagePreviewDelegate {
 
 private extension ImagePreviewViewController {
     
-    func setupView() {
+    func setupAppearance() {
         view.backgroundColor = .white
-        contentView.setupLayout()
         setupNavigationBar()
     }
     

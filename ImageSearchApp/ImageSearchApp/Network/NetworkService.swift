@@ -72,7 +72,7 @@ private extension NetworkService {
         let searchQueryItem = URLQueryItem(name: "query", value: searchQuery)
         let clientIdItem = URLQueryItem(name: "client_id", value: id)
         let pageNumber = URLQueryItem(name: "page", value: String(pageNumber))
-        let imagesPerSearch = URLQueryItem(name: "per_page", value: "50")
+        let imagesPerSearch = URLQueryItem(name: "per_page", value: "20")
         
         baseComponent?.queryItems = [pageNumber, imagesPerSearch, searchQueryItem, clientIdItem]
         
@@ -80,7 +80,6 @@ private extension NetworkService {
             
             return nil
         }
-        print(baseUrlComponent)
         return URLRequest(url: baseUrlComponent)
     }
     

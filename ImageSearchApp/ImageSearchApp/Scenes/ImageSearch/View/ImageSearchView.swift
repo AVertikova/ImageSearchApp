@@ -8,6 +8,14 @@
 import UIKit
 
 final class ImageSearchView: UIView {
+    var showGalleryButtonHandler: (()->Void)?
+    
+    lazy var showGalleryButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "photo.on.rectangle.angled"),
+                                     style: .plain, target: self, action: #selector(galleryButtonTapped))
+        
+        return button
+    }()
     
     var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -33,7 +41,7 @@ final class ImageSearchView: UIView {
     
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setConstraints()
     }
     
     @available(*, unavailable)
@@ -56,7 +64,7 @@ extension ImageSearchView {
         collectionView.dataSource = dataSource
     }
     
-    func updateRows(at index: Int) {
+    func updateItem(at index: Int) {
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
@@ -112,7 +120,7 @@ private extension ImageSearchView {
         return layout
     }
     
-    func setupLayout() {
+    func setConstraints() {
         backgroundColor = .systemBackground
         addSubview(searchBar)
         addSubview(collectionView)
@@ -128,5 +136,9 @@ private extension ImageSearchView {
             collectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
+    }
+    
+    @objc func galleryButtonTapped() {
+        showGalleryButtonHandler?()
     }
 }

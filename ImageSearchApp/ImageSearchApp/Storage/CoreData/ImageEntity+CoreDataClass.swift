@@ -2,7 +2,7 @@
 //  ImageEntity+CoreDataClass.swift
 //  ImageSearchApp
 //
-//  Created by Анна Вертикова on 20.06.2024.
+//  Created by Анна Вертикова on 21.06.2024.
 //
 //
 

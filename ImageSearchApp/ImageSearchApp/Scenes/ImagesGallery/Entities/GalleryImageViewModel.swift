@@ -1,5 +1,5 @@
 //
-//  DownloadedImageViewModel.swift
+//  GalleryImageViewModel.swift
 //  ImageSearchApp
 //
 //  Created by Анна Вертикова on 20.06.2024.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-struct DownloadedImageViewModel {
-    let id: UUID
-    let image: UIImage?
+struct GalleryImageViewModel {
+    let id: String
+    let image: UIImage
     let cathegory: String
 }

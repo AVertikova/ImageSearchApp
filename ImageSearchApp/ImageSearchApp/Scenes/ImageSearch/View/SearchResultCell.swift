@@ -11,7 +11,7 @@ import UIKit
 final class SearchResultCell: UICollectionViewCell {
     
     static let identifier = String(describing: SearchResultCell.self)
-    var delegate: ICellButtonsHandler?
+    var delegate: IImageSearchCellButtonsHandler?
     
     private var downloadingPaused = false
     
@@ -22,6 +22,18 @@ final class SearchResultCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
+    }()
+    
+    private lazy var downloadedMark: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "photo.badge.checkmark"), for: .normal)
+        button.tintColor = .black
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = button.frame.size.width/2
+        button.isEnabled = false
+        button.clipsToBounds = true
+        
+        return button
     }()
     
     private lazy var downloadButton: UIButton = {
@@ -124,7 +136,7 @@ final class SearchResultCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
-        setupView()
+        setupAppearance()
     }
     
     
@@ -132,6 +144,7 @@ final class SearchResultCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError(CommonError.requiredInitError)
     }
+    
 }
 
 extension SearchResultCell {
@@ -154,6 +167,7 @@ extension SearchResultCell {
             }
         }
         
+        downloadedMark.isHidden = !downloaded
         downloadControlStackView.isHidden = !showDownloadControl
         downloadMenuStackView.isHidden = downloaded || !isSelected
     }
@@ -179,16 +193,18 @@ extension SearchResultCell {
 
 private extension SearchResultCell {
     
-    func setupView() {
+    func setupAppearance() {
         downloadMenuStackView.isHidden = true
         downloadControlStackView.isHidden = true
-        setupLayout()
+        
+        setConstraints()
     }
     
-    func setupLayout() {
+    func setConstraints() {
         contentView.addSubview(resultImageView)
         contentView.addSubview(downloadMenuStackView)
         contentView.addSubview(downloadControlStackView)
+        contentView.addSubview(downloadedMark)
         
         NSLayoutConstraint.activate([
             
@@ -196,6 +212,11 @@ private extension SearchResultCell {
             resultImageView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor),
             resultImageView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
             resultImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            
+            downloadedMark.topAnchor.constraint(equalTo:safeAreaLayoutGuide.topAnchor, constant: 8),
+            downloadedMark.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            
+            
             
             downloadMenuStackView.bottomAnchor.constraint(equalTo:safeAreaLayoutGuide.bottomAnchor),
             downloadMenuStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),

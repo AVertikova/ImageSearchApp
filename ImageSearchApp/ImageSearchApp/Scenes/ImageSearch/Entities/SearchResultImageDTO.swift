@@ -1,5 +1,5 @@
 //
-//  ImageViewModel.swift
+//  SearchResultImageViewModel.swift
 //  ImageSearchApp
 //
 //  Created by Анна Вертикова on 18.06.2024.
@@ -7,8 +7,7 @@
 
 import UIKit
 
-struct ImageViewModel: Equatable {
-    let index: Int
+struct SearchResultImageDTO: Equatable, Hashable {
     let id: String
     let previewURL: URL
     let downloadURL: URL
@@ -16,3 +15,4 @@ struct ImageViewModel: Equatable {
     let image: UIImage?
     var downloaded = false
 }
+
