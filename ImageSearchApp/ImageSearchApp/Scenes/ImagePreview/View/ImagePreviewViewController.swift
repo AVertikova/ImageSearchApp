@@ -51,7 +51,7 @@ extension ImagePreviewViewController: IImagePreviewDelegate {
 private extension ImagePreviewViewController {
     
     func setupAppearance() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         setupNavigationBar()
     }
     

@@ -110,7 +110,7 @@ private extension ImagesGalleryView {
     }
     
     func setupAppearance() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         setConstraints()
     }
     

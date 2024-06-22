@@ -14,7 +14,6 @@ protocol IImagesGalleryInteractor {
 
 final class ImagesGalleryInteractor {
     private let dataService: IImagesGalleryDataService
-    private var fetchResult: [[GalleryImageViewModel]] = [[]]
     
     init(dataService: IImagesGalleryDataService) {
         self.dataService = dataService
@@ -24,13 +23,12 @@ final class ImagesGalleryInteractor {
 extension ImagesGalleryInteractor: IImagesGalleryInteractor {
     
     func fetchImages(completion: @escaping ([[GalleryImageViewModel]]?, Error?) -> Void) {
-        dataService.fetchImages() { [weak self] result, error in
+        dataService.fetchImages() { result, error in
             guard let result = result, error == nil else {
                 completion(nil, error)
                 return
             }
-            self?.fetchResult = result
-            completion(self?.fetchResult, nil)
+            completion(result, nil)
         }
     }
     

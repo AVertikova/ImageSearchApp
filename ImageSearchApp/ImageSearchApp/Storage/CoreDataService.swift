@@ -44,7 +44,7 @@ extension CoreDataService: IImageSearchDataService {
             if let imageData = image.image?.pngData() {
                 entity.imageData = imageData
             }
-            self.saveContext()
+            self.saveContext(context: context)
         }
     }
 }
@@ -76,7 +76,7 @@ extension CoreDataService: IImagesGalleryDataService {
             for item in items {
                 context.delete(item)
             }
-            saveContext()
+            saveContext(context: context)
         } catch let error as NSError {
             fatalError("Could not delete item. \(error), \(error.userInfo)")
         }
@@ -91,7 +91,7 @@ extension CoreDataService: IImagesGalleryDataService {
             for item in items {
                 context.delete(item)
             }
-            saveContext()
+            saveContext(context: context)
         } catch let error as NSError {
             fatalError("Could not delete item. \(error), \(error.userInfo)")
         }
@@ -106,15 +106,14 @@ extension CoreDataService: IImagesGalleryDataService {
             if let imageData = item.image.pngData() {
                 entity.imageData = imageData
             }
-            self.saveContext()
+            self.saveContext(context: context)
         }
     }
 }
 
 private extension CoreDataService {
     
-    func saveContext() {
-        let context = persistentContainer.viewContext
+    func saveContext(context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()

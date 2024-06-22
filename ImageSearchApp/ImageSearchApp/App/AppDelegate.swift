@@ -11,7 +11,6 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    
     var backgroundSessionCompletionHandler: (() -> Void)?
     var window: UIWindow?
     
