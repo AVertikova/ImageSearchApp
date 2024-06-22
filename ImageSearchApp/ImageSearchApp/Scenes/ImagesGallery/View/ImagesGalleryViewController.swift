@@ -23,11 +23,7 @@ class ImagesGalleryViewController: UIViewController {
     private let galleryDataSource: IImagesGalleryDataSource
     private let galleryDelegate: IImagesGalleryDelegate
     private var selectedItems: [IndexPath] = []
-    private var selectionModeIsOn = false {
-        didSet {
-            contentView.selectButtonIsActivated(selectionModeIsOn)
-        }
-    }
+    private var selectionModeIsOn = false 
     
     private lazy var contentView: ImagesGalleryView = {
         let view = ImagesGalleryView()

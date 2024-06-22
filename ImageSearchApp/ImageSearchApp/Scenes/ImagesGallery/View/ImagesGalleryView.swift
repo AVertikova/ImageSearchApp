@@ -14,6 +14,9 @@ class ImagesGalleryView: UIView {
         didSet {
             selectImagesButton.title = selectionModeOn ?
             "Cancel": "Select"
+            removeImagesButton.tintColor = selectionModeOn ?
+                .red : .systemFill
+            removeImagesButton.isHidden = !selectionModeOn
         }
     }
     
@@ -61,10 +64,6 @@ extension ImagesGalleryView {
     
     func setCollectionViewDataSource(_ dataSource: UICollectionViewDataSource) {
         collectionView.dataSource = dataSource
-    }
-    
-    func selectButtonIsActivated(_ active: Bool) {
-        removeImagesButton.tintColor = active ?  .systemRed : .white
     }
 }
 
