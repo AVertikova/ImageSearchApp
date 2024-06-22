@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct GalleryImageViewModel {
+struct GalleryImageViewModel: Equatable {
     let id: String
     let image: UIImage
     let cathegory: String

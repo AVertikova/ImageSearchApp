@@ -33,13 +33,14 @@ final class ImagesGalleryPresenter {
     private var fetchResult: [[GalleryImageViewModel]] = [[]]
     
     private var selectedImages: [GalleryImageViewModel] = []
+    private var updatedImages: [GalleryImageViewModel] = []
+    private var updatedFetchResult:  [[GalleryImageViewModel]] = [[]]
     private var selectedIndecies: [IndexPath] = []
     
     init(interactor: IImagesGalleryInteractor, router: ImagesGalleryRouter) {
         self.interactor = interactor
         self.router = router
     }
-    
 }
 
 extension ImagesGalleryPresenter: IImagesGalleryPresenter {
@@ -57,14 +58,19 @@ extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     
     func removeButtonTapped() {
         if selectedImages.isEmpty == false {
-            interactor.removeImages(selectedImages)
-            fetchImages()
-            ui?.update()
+            for image in selectedImages {
+                for section in fetchResult {
+                    let array = section.filter( { $0 != image } )
+                    updatedImages.append(contentsOf: array)
+                    updatedFetchResult.append(array)
+                }
+            }
             
+            interactor.updateImages(updatedImages)
+            updatedImages = []
+            
+            fetchImages()
             ui?.removeItemsAt(selectedIndecies)
-            ui?.update()
-            selectedImages = []
-            selectedIndecies = []
         }
     }
 }

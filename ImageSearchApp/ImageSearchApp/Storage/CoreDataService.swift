@@ -16,12 +16,14 @@ protocol IImageSearchDataService {
 protocol IImagesGalleryDataService {
     func fetchImages(completion: ([[GalleryImageViewModel]]?, Error?) -> Void)
     func removeImage(_ image: GalleryImageViewModel)
+    func removeAll()
+    func saveAll(_ images: [GalleryImageViewModel])
 }
 
 final class CoreDataService {
     private let entityName = "ImageEntity"
     
-    let persistentContainer: NSPersistentContainer = {
+    lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ImageSearchApp")
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
@@ -42,7 +44,7 @@ extension CoreDataService: IImageSearchDataService {
             if let imageData = image.image?.pngData() {
                 entity.imageData = imageData
             }
-            self.saveContext(context)
+            self.saveContext()
         }
     }
 }
@@ -74,16 +76,45 @@ extension CoreDataService: IImagesGalleryDataService {
             for item in items {
                 context.delete(item)
             }
-            saveContext(context)
+            saveContext()
         } catch let error as NSError {
             fatalError("Could not delete item. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func removeAll() {
+        let context = persistentContainer.viewContext
+        let fetchRequest = ImageEntity.fetchRequest()
+        
+        do {
+            let items = try context.fetch(fetchRequest)
+            for item in items {
+                context.delete(item)
+            }
+            saveContext()
+        } catch let error as NSError {
+            fatalError("Could not delete item. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func saveAll(_ images: [GalleryImageViewModel]) {
+        for item in images {
+            let context = persistentContainer.viewContext
+            let entity = ImageEntity(context: context)
+            entity.id = item.id
+            entity.cathegory = item.cathegory
+            if let imageData = item.image.pngData() {
+                entity.imageData = imageData
+            }
+            self.saveContext()
         }
     }
 }
 
 private extension CoreDataService {
     
-    func saveContext(_ context: NSManagedObjectContext) {
+    func saveContext() {
+        let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()
@@ -94,6 +125,7 @@ private extension CoreDataService {
         }
     }
     
+    
     func sortImagesByCathegory(_ images: [GalleryImageViewModel]) -> [[GalleryImageViewModel]] {
         
         let cathegories = [String](Set(images.map { $0.cathegory }))
@@ -102,7 +134,6 @@ private extension CoreDataService {
             return images.filter { $0.cathegory == cathegory }
             
         }
-        
         return model
     }
 }
