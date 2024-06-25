@@ -15,7 +15,7 @@ class ImagesGalleryView: UIView {
             selectImagesButton.title = selectionModeOn ?
             "Cancel": "Select"
             removeImagesButton.tintColor = selectionModeOn ?
-                .red : .systemFill
+                .red : .systemBackground
             removeImagesButton.isHidden = !selectionModeOn
         }
     }
@@ -29,7 +29,7 @@ class ImagesGalleryView: UIView {
     lazy var removeImagesButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage(systemName: "trash"),
                                      style: .plain, target: self, action: #selector(removeButtonTapped))
-        button.tintColor = .white
+        button.tintColor = .systemBackground
         return button
     }()
     

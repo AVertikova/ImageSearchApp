@@ -9,7 +9,7 @@ import Foundation
 
 protocol IImagesGalleryInteractor {
     func fetchImages(completion: @escaping ([[GalleryImageViewModel]]?, Error?) -> Void)
-    func updateImages(_ images: [GalleryImageViewModel])
+    func removeImages(_ image: GalleryImageViewModel)
 }
 
 final class ImagesGalleryInteractor {
@@ -32,8 +32,7 @@ extension ImagesGalleryInteractor: IImagesGalleryInteractor {
         }
     }
     
-    func updateImages(_ images: [GalleryImageViewModel]) {
-        dataService.removeAll()
-        dataService.saveAll(images)
+    func removeImages(_ image: GalleryImageViewModel) {
+            dataService.removeImage(image)
     }
 }

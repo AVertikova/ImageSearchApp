@@ -38,13 +38,15 @@ extension CoreDataService: IImageSearchDataService {
     
     func save(image: SearchResultImageDTO) {
         persistentContainer.performBackgroundTask { context in
-            let entity = ImageEntity(context: context)
-            entity.id = image.id
-            entity.cathegory = image.cathegory
-            if let imageData = image.image?.pngData() {
-                entity.imageData = imageData
+            if self.imageExists(with: image.id) == false {
+                let entity = ImageEntity(context: context)
+                entity.id = image.id
+                entity.cathegory = image.cathegory
+                if let imageData = image.image?.pngData() {
+                    entity.imageData = imageData
+                }
+                self.saveContext(context: context)
             }
-            self.saveContext(context: context)
         }
     }
 }
@@ -53,13 +55,14 @@ extension CoreDataService: IImagesGalleryDataService {
     
     func fetchImages(completion: ([[GalleryImageViewModel]]?, Error?) -> Void) {
         let context = persistentContainer.viewContext
-        let fetchRequest = ImageEntity.fetchRequest()
+        let fetchRequest = NSFetchRequest<ImageEntity>(entityName: entityName)
         
         do {
             let fetchResult = try context.fetch(fetchRequest)
             let images = fetchResult.map { GalleryImageViewModel(id: $0.id,
                                                                  image: UIImage(data: $0.imageData) ?? UIImage(),
                                                                  cathegory: $0.cathegory) }
+            
             completion(sortImagesByCathegory(images), nil)
         } catch {
             completion(nil, error)
@@ -68,7 +71,7 @@ extension CoreDataService: IImagesGalleryDataService {
     
     func removeImage(_ image: GalleryImageViewModel) {
         let context = persistentContainer.viewContext
-        let fetchRequest = ImageEntity.fetchRequest()
+        let fetchRequest = NSFetchRequest<ImageEntity>(entityName: entityName)
         fetchRequest.predicate = NSPredicate(format: "id == %@" , image.id as CVarArg)
         
         do {
@@ -124,6 +127,19 @@ private extension CoreDataService {
         }
     }
     
+    func imageExists(with id: String) -> Bool {
+        let context = persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<ImageEntity>(entityName: entityName)
+        fetchRequest.predicate = NSPredicate(format: "id == %@" , id as CVarArg)
+        
+        do {
+            let items = try context.fetch(fetchRequest)
+            return items.isEmpty == false
+        } catch let error as NSError {
+            fatalError("Could not delete item. \(error), \(error.userInfo)")
+        }
+    }
+    
     
     func sortImagesByCathegory(_ images: [GalleryImageViewModel]) -> [[GalleryImageViewModel]] {
         
@@ -131,8 +147,13 @@ private extension CoreDataService {
         
         let model = cathegories.map { cathegory in
             return images.filter { $0.cathegory == cathegory }
+            }
+        
+        let modelSorted = model.sorted(by: {
+            guard let firstSection = $0.first, let secondSection = $1.first else  { return false }
+              return  firstSection.cathegory < secondSection.cathegory
             
-        }
-        return model
+        })
+        return modelSorted
     }
 }

@@ -59,18 +59,11 @@ extension ImagesGalleryPresenter: IImagesGalleryPresenter {
     func removeButtonTapped() {
         if selectedImages.isEmpty == false {
             for image in selectedImages {
-                for section in fetchResult {
-                    let array = section.filter( { $0 != image } )
-                    updatedImages.append(contentsOf: array)
-                    updatedFetchResult.append(array)
-                }
+                interactor.removeImages(image)
             }
             
-            interactor.updateImages(updatedImages)
-            updatedImages = []
-            
             fetchImages()
-            ui?.removeItemsAt(selectedIndecies)
+            ui?.update()
         }
     }
 }
@@ -92,7 +85,6 @@ extension ImagesGalleryPresenter: IImagesGalleryDataSource {
     }
     
     func getHeader(for section: Int) -> String {
-        
         guard let item = fetchResult[section].first else {
             return "Empty Header"
         }

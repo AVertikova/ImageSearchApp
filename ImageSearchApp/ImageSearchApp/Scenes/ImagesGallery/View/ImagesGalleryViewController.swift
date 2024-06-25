@@ -10,7 +10,6 @@ import UIKit
 protocol IImagesGalleryView: AnyObject {
     func update()
     func setCellSelected(at indexPath: IndexPath)
-    func removeItemsAt(_ indexPath: [IndexPath])
 }
 
 protocol IImagesGalleryButtonsHandler {
@@ -62,7 +61,9 @@ extension ImagesGalleryViewController: IImagesGalleryView {
     
     func update() {
         DispatchQueue.main.async {
+            
             self.contentView.collectionView.reloadData()
+            self.contentView.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
     
@@ -70,10 +71,6 @@ extension ImagesGalleryViewController: IImagesGalleryView {
         guard let cell = contentView.collectionView.cellForItem(at: indexPath) as? ImagesGalleryCell else { return }
         cell.isSelected = true
         cell.setSelected()
-    }
-    
-    func removeItemsAt(_ indexPath: [IndexPath]) {
-        self.contentView.collectionView.deleteItems(at: indexPath)
     }
 }
 
@@ -92,7 +89,7 @@ extension ImagesGalleryViewController: INotifierDelegate {
     
     func showAlert(message: String) {
         
-        let alert = UIAlertController(title: "Something is wrong :(", message: message, preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: message, message: "", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
