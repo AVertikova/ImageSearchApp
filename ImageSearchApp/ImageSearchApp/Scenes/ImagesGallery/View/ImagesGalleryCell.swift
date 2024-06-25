@@ -21,15 +21,6 @@ class ImagesGalleryCell: UICollectionViewCell {
         return imageView
     }()
     
-    lazy var selectionModeChecked: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return imageView
-    }()
-    
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -52,13 +43,19 @@ class ImagesGalleryCell: UICollectionViewCell {
     
     func configure(with image: UIImage, selectionModeIsOn: Bool) {
         selectionModeUnchecked.isHidden = !selectionModeIsOn
+        self.setSelected()
         
         self.imageView.image = image
     }
     
     func setSelected() {
+        
         if isSelected {
             var config = UIImage.SymbolConfiguration(paletteColors: [.systemBlue, .systemBlue])
+            config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
+            selectionModeUnchecked.preferredSymbolConfiguration = config
+        } else {
+            var config = UIImage.SymbolConfiguration(paletteColors: [.white, .systemBlue])
             config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
             selectionModeUnchecked.preferredSymbolConfiguration = config
         }

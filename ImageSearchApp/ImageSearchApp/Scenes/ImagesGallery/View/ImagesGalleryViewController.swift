@@ -61,9 +61,7 @@ extension ImagesGalleryViewController: IImagesGalleryView {
     
     func update() {
         DispatchQueue.main.async {
-            
             self.contentView.collectionView.reloadData()
-            self.contentView.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
     
@@ -82,6 +80,7 @@ extension ImagesGalleryViewController: IImagesGalleryButtonsHandler {
     
     func removeImagesButtonTapped() {
         presenter.removeButtonTapped()
+        update()
     }
 }
 
