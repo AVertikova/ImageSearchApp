@@ -10,7 +10,7 @@ import UIKit
 class ImagesGalleryCell: UICollectionViewCell {
     static let identifier = "ImagesGalleryCell"
     
-    var selectionModeUnchecked: UIImageView = {
+    var selectionModeCheck: UIImageView = {
         let imageView = UIImageView()
         var config = UIImage.SymbolConfiguration(paletteColors: [.white, .systemBlue])
         config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
@@ -42,7 +42,7 @@ class ImagesGalleryCell: UICollectionViewCell {
     }
     
     func configure(with image: UIImage, selectionModeIsOn: Bool) {
-        selectionModeUnchecked.isHidden = !selectionModeIsOn
+        selectionModeCheck.isHidden = !selectionModeIsOn
         self.setSelected()
         
         self.imageView.image = image
@@ -53,11 +53,11 @@ class ImagesGalleryCell: UICollectionViewCell {
         if isSelected {
             var config = UIImage.SymbolConfiguration(paletteColors: [.systemBlue, .systemBlue])
             config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
-            selectionModeUnchecked.preferredSymbolConfiguration = config
+            selectionModeCheck.preferredSymbolConfiguration = config
         } else {
             var config = UIImage.SymbolConfiguration(paletteColors: [.white, .systemBlue])
             config = config.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24.0)))
-            selectionModeUnchecked.preferredSymbolConfiguration = config
+            selectionModeCheck.preferredSymbolConfiguration = config
         }
     }
 }
@@ -66,13 +66,13 @@ private extension ImagesGalleryCell {
     
     func setConstraints() {
         contentView.addSubview(imageView)
-        contentView.addSubview(selectionModeUnchecked)
+        contentView.addSubview(selectionModeCheck)
         
         
         NSLayoutConstraint.activate([
             
-            selectionModeUnchecked.topAnchor.constraint(equalTo:safeAreaLayoutGuide.topAnchor, constant: 8),
-            selectionModeUnchecked.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            selectionModeCheck.topAnchor.constraint(equalTo:safeAreaLayoutGuide.topAnchor, constant: 8),
+            selectionModeCheck.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
             
             imageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             imageView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor),

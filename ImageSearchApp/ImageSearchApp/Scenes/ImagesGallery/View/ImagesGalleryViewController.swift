@@ -9,7 +9,7 @@ import UIKit
 
 protocol IImagesGalleryView: AnyObject {
     func update()
-    func setCellSelected(at indexPath: IndexPath)
+    func setCellSelectionIcon(at indexPath: IndexPath, isSelected: Bool)
 }
 
 protocol IImagesGalleryButtonsHandler {
@@ -21,7 +21,6 @@ class ImagesGalleryViewController: UIViewController {
     private let presenter: IImagesGalleryPresenter
     private let galleryDataSource: IImagesGalleryDataSource
     private let galleryDelegate: IImagesGalleryDelegate
-    private var selectedItems: [IndexPath] = []
     private var selectionModeIsOn = false 
     
     private lazy var contentView: ImagesGalleryView = {
@@ -65,9 +64,9 @@ extension ImagesGalleryViewController: IImagesGalleryView {
         }
     }
     
-    func setCellSelected(at indexPath: IndexPath) {
+    func setCellSelectionIcon(at indexPath: IndexPath, isSelected: Bool) {
         guard let cell = contentView.collectionView.cellForItem(at: indexPath) as? ImagesGalleryCell else { return }
-        cell.isSelected = true
+        cell.isSelected = isSelected
         cell.setSelected()
     }
 }
@@ -146,10 +145,15 @@ extension ImagesGalleryViewController: UICollectionViewDataSource {
 extension ImagesGalleryViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedItems.append(indexPath)
         galleryDelegate.imageSelected(at: indexPath.section,
                                       index: indexPath.item,
                                       selectionModeIsOn: selectionModeIsOn)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if selectionModeIsOn {
+            galleryDelegate.imageDeselected(at: indexPath.section, index: indexPath.item)
+        }
     }
 }
 

@@ -40,6 +40,7 @@ class ImagesGalleryView: UIView {
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: SectionHeader.identifier)
         collectionView.backgroundColor = .systemBackground
         collectionView.isUserInteractionEnabled = true
+        collectionView.allowsMultipleSelection = true
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView

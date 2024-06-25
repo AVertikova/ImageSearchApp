@@ -23,6 +23,7 @@ protocol IImagesGalleryDataSource {
 
 protocol IImagesGalleryDelegate {
     func imageSelected(at section: Int, index: Int, selectionModeIsOn: Bool)
+    func imageDeselected(at section: Int, index: Int)
 }
 
 final class ImagesGalleryPresenter {
@@ -33,9 +34,6 @@ final class ImagesGalleryPresenter {
     private var fetchResult: [[GalleryImageViewModel]] = [[]]
     
     private var selectedImages: [GalleryImageViewModel] = []
-    private var updatedImages: [GalleryImageViewModel] = []
-    private var updatedFetchResult:  [[GalleryImageViewModel]] = [[]]
-    private var selectedIndecies: [IndexPath] = []
     
     init(interactor: IImagesGalleryInteractor, router: ImagesGalleryRouter) {
         self.interactor = interactor
@@ -98,8 +96,7 @@ extension ImagesGalleryPresenter: IImagesGalleryDelegate {
         
         if selectionModeIsOn {
             selectedImages.append(fetchResult[section][index])
-            selectedIndecies.append(IndexPath(item: index, section: section))
-            ui?.setCellSelected(at: IndexPath(item: index, section: section))
+            ui?.setCellSelectionIcon(at: IndexPath(item: index, section: section), isSelected: true)
         } else {
             selectedImages = []
             guard let sourceVC = self.ui as? ImagesGalleryViewController else {
@@ -107,6 +104,12 @@ extension ImagesGalleryPresenter: IImagesGalleryDelegate {
             }
             router.showImageModally(with: fetchResult[section][index].image, at: sourceVC)
         }
+    }
+    
+    func imageDeselected(at section: Int, index: Int) {
+        let image = fetchResult[section][index]
+        selectedImages = selectedImages.filter({ $0.id != image.id })
+        ui?.setCellSelectionIcon(at: IndexPath(item: index, section: section), isSelected: false)
     }
 }
 
